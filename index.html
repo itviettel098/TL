@@ -794,9 +794,13 @@ function enterRoom(room){
 }
 
 function startRoomListener(){
+  let _enteredGame=false;
   App.listeners.room=dbListen('rooms/'+App.currentRoom,(room)=>{
     if(!room){detachAll();showLobby();return;}
-    if(room.status==='playing'){detachAll();SFX.gameStart();enterGame(room);return;}
+    if(room.status==='playing'){
+      if(!_enteredGame){_enteredGame=true;detachAll();SFX.gameStart();enterGame(room);}
+      return;
+    }
     renderRoom(room);
   });
 }
@@ -846,8 +850,7 @@ window.doStartGame=async function(){
   const newRound=room.round||1;
   const gs=createPhomState(room.players,room.playerDisplays,newRound,null);
   await dbUpd('rooms/'+App.currentRoom,{gameState:gs,status:'playing'});
-  const updated=await dbGet('rooms/'+App.currentRoom);
-  if(updated)enterGame(updated);
+  // Không gọi enterGame ở đây — để startRoomListener tự detect status='playing' và gọi
 };
 window.doLeaveRoom=async function(){
   SFX.click();const room=await dbGet('rooms/'+App.currentRoom);
@@ -1031,11 +1034,11 @@ let _winShown=false,_prevTurnSlot=-1;
 
 function enterGame(room){
   detachAll();SFX.resetT();
-  // Always re-detect mySlot from room.players
   if(room.players){
     const idx=room.players.indexOf(App.currentUser.username);
     if(idx>=0)App.mySlot=idx;
   }
+  console.log('enterGame mySlot=',App.mySlot,'players=',room.players,'me=',App.currentUser.username);
   document.getElementById('gameRoomName').textContent='🃏 '+room.name;
   document.getElementById('gameRound').textContent='Ván '+(room.round||1);
   App.selected=new Set();App.lastGChatCount=0;_winShown=false;_prevTurnSlot=-1;_prevRoomPC=2;
