@@ -971,16 +971,15 @@ function createPhomState(players,displays,round,firstPlayer){
   const h1=sortCards(fullDeck.slice(9,18));
   const deck=fullDeck.slice(18);
   const fp=firstPlayer!==null&&firstPlayer!==undefined&&firstPlayer>=0?firstPlayer:0;
-  // Firebase requires objects not arrays for nested data — store as indexed objects
   return{
-    hands:{0:h0,1:h1},
+    hands:{"0":h0,"1":h1},
     deck:deck,
     rubbish:[],
-    laidPhoms:{0:[],1:[]},
+    laidPhoms:{"0":[],"1":[]},
     turn:fp,
     phase:'draw',
     gameOver:false,winner:-1,
-    scores:{0:0,1:0},round:round||1,
+    scores:{"0":0,"1":0},round:round||1,
     turnStartAt:Date.now(),
     passedCount:0
   };
@@ -1071,6 +1070,9 @@ function renderGame(room){
 
   const rawGs=room.gameState;
   // Build a clean normalized gameState object
+  const h0raw=rawGs.hands?(rawGs.hands['0']!==undefined?rawGs.hands['0']:(rawGs.hands[0]!==undefined?rawGs.hands[0]:null)):null;
+  const h1raw=rawGs.hands?(rawGs.hands['1']!==undefined?rawGs.hands['1']:(rawGs.hands[1]!==undefined?rawGs.hands[1]:null)):null;
+
   const gs={
     turn:rawGs.turn!==undefined?+rawGs.turn:0,
     phase:rawGs.phase||'draw',
@@ -1082,18 +1084,21 @@ function renderGame(room){
     deck:toArr(rawGs.deck),
     rubbish:toArr(rawGs.rubbish),
     scores:[
-      +(rawGs.scores&&(rawGs.scores[0]!==undefined?rawGs.scores[0]:rawGs.scores['0'])||0),
-      +(rawGs.scores&&(rawGs.scores[1]!==undefined?rawGs.scores[1]:rawGs.scores['1'])||0)
+      +(rawGs.scores&&(rawGs.scores['0']!==undefined?rawGs.scores['0']:rawGs.scores[0])||0),
+      +(rawGs.scores&&(rawGs.scores['1']!==undefined?rawGs.scores['1']:rawGs.scores[1])||0)
     ],
-    hands:[
-      toArr(rawGs.hands&&(rawGs.hands[0]!==undefined?rawGs.hands[0]:rawGs.hands['0'])),
-      toArr(rawGs.hands&&(rawGs.hands[1]!==undefined?rawGs.hands[1]:rawGs.hands['1']))
-    ],
+    hands:[toArr(h0raw),toArr(h1raw)],
     laidPhoms:[
-      toArr(rawGs.laidPhoms&&(rawGs.laidPhoms[0]!==undefined?rawGs.laidPhoms[0]:rawGs.laidPhoms['0'])).map(toArr),
-      toArr(rawGs.laidPhoms&&(rawGs.laidPhoms[1]!==undefined?rawGs.laidPhoms[1]:rawGs.laidPhoms['1'])).map(toArr)
+      toArr(rawGs.laidPhoms&&(rawGs.laidPhoms['0']!==undefined?rawGs.laidPhoms['0']:rawGs.laidPhoms[0])).map(toArr),
+      toArr(rawGs.laidPhoms&&(rawGs.laidPhoms['1']!==undefined?rawGs.laidPhoms['1']:rawGs.laidPhoms[1])).map(toArr)
     ]
   };
+    
+// Fix mySlot nếu bị -1 hoặc sai
+  if(App.mySlot<0||!room.players||room.players[App.mySlot]!==App.currentUser.username){
+    const idx=room.players?room.players.indexOf(App.currentUser.username):-1;
+    if(idx>=0)App.mySlot=idx;
+  }
 
   const my=App.mySlot,op=1-my;
   const hands=gs.hands;
