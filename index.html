@@ -846,6 +846,8 @@ window.doStartGame=async function(){
   const newRound=room.round||1;
   const gs=createPhomState(room.players,room.playerDisplays,newRound,null);
   await dbUpd('rooms/'+App.currentRoom,{gameState:gs,status:'playing'});
+  const updated=await dbGet('rooms/'+App.currentRoom);
+  if(updated)enterGame(updated);
 };
 window.doLeaveRoom=async function(){
   SFX.click();const room=await dbGet('rooms/'+App.currentRoom);
