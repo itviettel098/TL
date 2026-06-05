@@ -981,8 +981,39 @@ function createPhomState(players,displays,round,firstPlayer){
   };
 }
 
+// ── Normalize gameState from Firebase (string keys → proper arrays) ──
+function normalizeGs(raw){
+  function toArr(v){if(!v)return[];if(Array.isArray(v))return v;return Object.keys(v).sort((a,b)=>+a-+b).map(k=>v[k]);}
+  const h0=toArr(raw.hands&&(raw.hands[0]!==undefined?raw.hands[0]:raw.hands["0"]));
+  const h1=toArr(raw.hands&&(raw.hands[1]!==undefined?raw.hands[1]:raw.hands["1"]));
+  const lp0=toArr(raw.laidPhoms&&(raw.laidPhoms[0]!==undefined?raw.laidPhoms[0]:raw.laidPhoms["0"])).map(toArr);
+  const lp1=toArr(raw.laidPhoms&&(raw.laidPhoms[1]!==undefined?raw.laidPhoms[1]:raw.laidPhoms["1"])).map(toArr);
+  return{
+    turn:raw.turn!==undefined?+raw.turn:0,
+    phase:raw.phase||"draw",
+    gameOver:!!raw.gameOver,
+    winner:raw.winner!==undefined?+raw.winner:-1,
+    turnStartAt:raw.turnStartAt||Date.now(),
+    passedCount:raw.passedCount||0,
+    round:raw.round||1,
+    deck:toArr(raw.deck),
+    rubbish:toArr(raw.rubbish),
+    scores:[+(raw.scores&&(raw.scores[0]!==undefined?raw.scores[0]:raw.scores["0"])||0),+(raw.scores&&(raw.scores[1]!==undefined?raw.scores[1]:raw.scores["1"])||0)],
+    hands:[h0,h1],
+    laidPhoms:[lp0,lp1]
+  };
+}
+function gsToFb(gs){
+  return{turn:gs.turn,phase:gs.phase,gameOver:gs.gameOver,winner:gs.winner,
+    turnStartAt:gs.turnStartAt,passedCount:gs.passedCount||0,round:gs.round,
+    deck:gs.deck,rubbish:gs.rubbish,
+    scores:{"0":gs.scores[0],"1":gs.scores[1]},
+    hands:{"0":gs.hands[0],"1":gs.hands[1]},
+    laidPhoms:{"0":gs.laidPhoms[0],"1":gs.laidPhoms[1]}};
+}
+
 // HTML cho 1 lá bài
-function cardHTML(c,idx,clickable,extraClass=''){
+function cardHTML(c,idx,clickable,extraClass=""){
   const red=['d','h'].includes(c.s);
   const sym=SUIT_SYM[c.s];
   const sel=clickable&&App.selected.has(idx);
@@ -1023,34 +1054,48 @@ function startGameListener(){
 
 function renderGame(room){
   if(!room||!room.gameState)return;
-  const gs=room.gameState;
   // Fix mySlot if lost (e.g. after rejoin)
   if(App.mySlot<0&&room.players){
     const idx=room.players.indexOf(App.currentUser.username);
     if(idx>=0)App.mySlot=idx;
   }
-  // Ensure hands are arrays (Firebase can return null for empty arrays)
-  if(!gs.hands)gs.hands=[[],[]];
-  if(!gs.hands[0])gs.hands[0]=[];
-  if(!gs.hands[1])gs.hands[1]=[];
-  if(!gs.laidPhoms)gs.laidPhoms=[[],[]];
-  if(!gs.laidPhoms[0])gs.laidPhoms[0]=[];
-  if(!gs.laidPhoms[1])gs.laidPhoms[1]=[];
-  if(!gs.rubbish)gs.rubbish=[];
-  if(!gs.deck)gs.deck=[];
-  const my=App.mySlot,op=1-my;
   window._lastRoom=room;
-  // Normalize hands/laidPhoms/scores from Firebase (may come as objects with string keys)
+
+  // ── Normalize everything from Firebase (objects with string keys → arrays) ──
   function toArr(v){if(!v)return[];if(Array.isArray(v))return v;return Object.keys(v).sort((a,b)=>+a-+b).map(k=>v[k]);}
-  const hand0=toArr(gs.hands&&gs.hands[0]);
-  const hand1=toArr(gs.hands&&gs.hands[1]);
-  const hands=[hand0,hand1];
-  const lp0=toArr(gs.laidPhoms&&gs.laidPhoms[0]);
-  const lp1=toArr(gs.laidPhoms&&gs.laidPhoms[1]);
-  const laidPhoms=[lp0,lp1];
-  const scores=[+(gs.scores&&(gs.scores[0]||gs.scores['0'])||0),+(gs.scores&&(gs.scores[1]||gs.scores['1'])||0)];
-  const rubbish=toArr(gs.rubbish);
-  const deck=toArr(gs.deck);
+
+  const rawGs=room.gameState;
+  // Build a clean normalized gameState object
+  const gs={
+    turn:rawGs.turn!==undefined?+rawGs.turn:0,
+    phase:rawGs.phase||'draw',
+    gameOver:!!rawGs.gameOver,
+    winner:rawGs.winner!==undefined?+rawGs.winner:-1,
+    turnStartAt:rawGs.turnStartAt||Date.now(),
+    passedCount:rawGs.passedCount||0,
+    round:rawGs.round||1,
+    deck:toArr(rawGs.deck),
+    rubbish:toArr(rawGs.rubbish),
+    scores:[
+      +(rawGs.scores&&(rawGs.scores[0]!==undefined?rawGs.scores[0]:rawGs.scores['0'])||0),
+      +(rawGs.scores&&(rawGs.scores[1]!==undefined?rawGs.scores[1]:rawGs.scores['1'])||0)
+    ],
+    hands:[
+      toArr(rawGs.hands&&(rawGs.hands[0]!==undefined?rawGs.hands[0]:rawGs.hands['0'])),
+      toArr(rawGs.hands&&(rawGs.hands[1]!==undefined?rawGs.hands[1]:rawGs.hands['1']))
+    ],
+    laidPhoms:[
+      toArr(rawGs.laidPhoms&&(rawGs.laidPhoms[0]!==undefined?rawGs.laidPhoms[0]:rawGs.laidPhoms['0'])).map(toArr),
+      toArr(rawGs.laidPhoms&&(rawGs.laidPhoms[1]!==undefined?rawGs.laidPhoms[1]:rawGs.laidPhoms['1'])).map(toArr)
+    ]
+  };
+
+  const my=App.mySlot,op=1-my;
+  const hands=gs.hands;
+  const laidPhoms=gs.laidPhoms;
+  const scores=gs.scores;
+  const rubbish=gs.rubbish;
+  const deck=gs.deck;
   document.getElementById('oppNameLabel').textContent=room.playerDisplays[op]||'Đối thủ';
   document.getElementById('myNameLabel').textContent=room.playerDisplays[my]||'Bạn';
   document.getElementById('gameRound').textContent='Ván '+(room.round||1);
@@ -1223,107 +1268,97 @@ const origRenderGame=renderGame;
 // ── DRAW DECK ──
 window.doDrawDeck=async function(){
   const room=await dbGet('rooms/'+App.currentRoom);if(!room||!room.gameState)return;
-  const gs=JSON.parse(JSON.stringify(room.gameState));
-  if(gs.turn!==App.mySlot||gs.phase!=='draw'||!gs.deck||!gs.deck.length)return;
+  const gs=normalizeGs(room.gameState);
+  if(gs.turn!==App.mySlot||gs.phase!=='draw'||!gs.deck.length)return;
   SFX.draw();
-  const drawn=gs.deck.shift(); // rút 1 lá từ đầu hốc
+  const drawn=gs.deck.shift();
   gs.hands[App.mySlot].push(drawn);
-  // Kiểm tra ù
   if(checkU(gs.hands[App.mySlot])){
-    gs.gameOver=true;gs.winner=App.mySlot;gs.scores[App.mySlot]=(gs.scores[App.mySlot]||0)+1;
-    // Hạ toàn bộ vào phỏm
+    gs.gameOver=true;gs.winner=App.mySlot;gs.scores[App.mySlot]++;
     gs.laidPhoms[App.mySlot]=[...findBestPhomGroups(gs.hands[App.mySlot])];
     gs.hands[App.mySlot]=[];
-    await dbUpd('rooms/'+App.currentRoom,{gameState:gs});return;
+    await dbUpd('rooms/'+App.currentRoom,{gameState:gsToFb(gs)});return;
   }
   gs.phase='phom';gs.turnStartAt=Date.now();
   App.selected=new Set();
-  await dbUpd('rooms/'+App.currentRoom,{gameState:gs});
+  await dbUpd('rooms/'+App.currentRoom,{gameState:gsToFb(gs)});
 };
 
 // ── DRAW RUBBISH ──
 window.doDrawRubbish=async function(){
   const room=await dbGet('rooms/'+App.currentRoom);if(!room||!room.gameState)return;
-  const gs=JSON.parse(JSON.stringify(room.gameState));
-  if(gs.turn!==App.mySlot||gs.phase!=='draw'||!gs.rubbish||!gs.rubbish.length)return;
+  const gs=normalizeGs(room.gameState);
+  if(gs.turn!==App.mySlot||gs.phase!=='draw'||!gs.rubbish.length)return;
   SFX.draw();
-  const drawn=gs.rubbish.pop(); // rút lá trên cùng rác
+  const drawn=gs.rubbish.pop();
   gs.hands[App.mySlot].push(drawn);
   if(checkU(gs.hands[App.mySlot])){
-    gs.gameOver=true;gs.winner=App.mySlot;gs.scores[App.mySlot]=(gs.scores[App.mySlot]||0)+1;
+    gs.gameOver=true;gs.winner=App.mySlot;gs.scores[App.mySlot]++;
     gs.laidPhoms[App.mySlot]=[...findBestPhomGroups(gs.hands[App.mySlot])];
     gs.hands[App.mySlot]=[];
-    await dbUpd('rooms/'+App.currentRoom,{gameState:gs});return;
+    await dbUpd('rooms/'+App.currentRoom,{gameState:gsToFb(gs)});return;
   }
   gs.phase='phom';gs.turnStartAt=Date.now();
   App.selected=new Set();
-  await dbUpd('rooms/'+App.currentRoom,{gameState:gs});
+  await dbUpd('rooms/'+App.currentRoom,{gameState:gsToFb(gs)});
 };
 
 // ── HẠ PHỎM ──
 window.doLayPhom=async function(){
   const sel=Array.from(App.selected);if(sel.length<3){return;}
   const room=await dbGet('rooms/'+App.currentRoom);if(!room||!room.gameState)return;
-  const gs=JSON.parse(JSON.stringify(room.gameState));
+  const gs=normalizeGs(room.gameState);
   if(gs.turn!==App.mySlot||(gs.phase!=='phom'&&gs.phase!=='draw')||gs.gameOver)return;
   const cards=sel.map(i=>gs.hands[App.mySlot][i]);
-  // Kiểm tra hợp lệ
   if(!isValidPhom(cards)){showGameStatus('Bộ này không phải phỏm hợp lệ!');return;}
   SFX.phom();
-  // Thêm vào laidPhoms
   const laidPhom=sortCards(cards);
   gs.laidPhoms[App.mySlot].push(laidPhom);
-  // Xoá khỏi tay
   const selSet=new Set(sel);
   gs.hands[App.mySlot]=gs.hands[App.mySlot].filter((_,i)=>!selSet.has(i));
   App.selected=new Set();
-  // Kiểm tra hết bài
   if(gs.hands[App.mySlot].length===0){
-    gs.gameOver=true;gs.winner=App.mySlot;gs.scores[App.mySlot]=(gs.scores[App.mySlot]||0)+1;
+    gs.gameOver=true;gs.winner=App.mySlot;gs.scores[App.mySlot]++;
   } else {
-    // Vẫn giữ phase phom để hạ thêm
     gs.phase='phom';
   }
-  await dbUpd('rooms/'+App.currentRoom,{gameState:gs});
+  await dbUpd('rooms/'+App.currentRoom,{gameState:gsToFb(gs)});
 };
 
 // ── ĐÁNH BÀI ──
 window.doDiscard=async function(){
   const sel=Array.from(App.selected);if(sel.length!==1){showGameStatus('Chọn đúng 1 lá để đánh!');return;}
   const room=await dbGet('rooms/'+App.currentRoom);if(!room||!room.gameState)return;
-  const gs=JSON.parse(JSON.stringify(room.gameState));
+  const gs=normalizeGs(room.gameState);
   if(gs.turn!==App.mySlot||(gs.phase!=='discard'&&gs.phase!=='phom')||gs.gameOver)return;
   SFX.discard();
   const idx=sel[0];const discarded=gs.hands[App.mySlot][idx];
   gs.hands[App.mySlot]=gs.hands[App.mySlot].filter((_,i)=>i!==idx);
-  gs.rubbish=gs.rubbish||[];gs.rubbish.push(discarded);
-  // Chuyển lượt
+  gs.rubbish.push(discarded);
   gs.turn=1-App.mySlot;gs.phase='draw';gs.turnStartAt=Date.now();
   App.selected=new Set();
-  // Kiểm tra hốc rỗng — kết thúc bằng điểm
-  if(!gs.deck||!gs.deck.length){
-    // So điểm rác
+  if(!gs.deck.length){
     const myPts=calcRubbish(gs.hands[App.mySlot]);const opPts=calcRubbish(gs.hands[1-App.mySlot]);
     gs.gameOver=true;
     gs.winner=myPts<=opPts?App.mySlot:(1-App.mySlot);
-    gs.scores[gs.winner]=(gs.scores[gs.winner]||0)+1;
+    gs.scores[gs.winner]++;
   }
-  await dbUpd('rooms/'+App.currentRoom,{gameState:gs});
+  await dbUpd('rooms/'+App.currentRoom,{gameState:gsToFb(gs)});
 };
 
 // ── SORT ──
 window.sortHand=async function(){
   SFX.sort();const room=await dbGet('rooms/'+App.currentRoom);if(!room||!room.gameState)return;
-  const newGs=JSON.parse(JSON.stringify(room.gameState));
-  newGs.hands[App.mySlot]=sortCards(newGs.hands[App.mySlot]);
+  const gs=normalizeGs(room.gameState);
+  gs.hands[App.mySlot]=sortCards(gs.hands[App.mySlot]);
   App.selected=new Set();
-  await dbUpd('rooms/'+App.currentRoom,{gameState:newGs});
+  await dbUpd('rooms/'+App.currentRoom,{gameState:gsToFb(gs)});
 };
 
 // ── HINT ──
 window.doHint=async function(){
   SFX.click();const room=await dbGet('rooms/'+App.currentRoom);if(!room||!room.gameState)return;
-  const gs=room.gameState;if(gs.turn!==App.mySlot)return;
+  const gs=normalizeGs(room.gameState);if(gs.turn!==App.mySlot)return;
   const hand=gs.hands[App.mySlot];
   const phomIdxGroups=findPhoms(hand);
   if(phomIdxGroups.length){
