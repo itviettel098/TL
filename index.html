@@ -17,15 +17,9 @@
 body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-dark);min-height:100vh;color:var(--text);}
 .screen{display:none;min-height:100vh;}
 .screen.active{display:flex;}
-
-/* ── CANVAS ── */
 #fxCanvas{position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden;}
-
-/* ── TOASTS ── */
 .turn-toast{position:fixed;top:66px;left:50%;transform:translateX(-50%) translateY(-18px);background:linear-gradient(135deg,var(--gold),#fcd34d);color:#1a1a2e;font-family:'Be Vietnam Pro',sans-serif;font-weight:900;font-size:14px;padding:9px 26px;border-radius:30px;box-shadow:0 6px 22px rgba(240,180,41,0.55);opacity:0;pointer-events:none;z-index:400;transition:all .35s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;}
 .turn-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-
-/* ── AUTH ── */
 #authScreen{flex-direction:column;align-items:center;justify-content:center;padding:24px;background:radial-gradient(ellipse at 40% 30%,#1a4d6e 0%,#0b1f2e 65%);}
 .logo{font-family:'Be Vietnam Pro',sans-serif;font-size:34px;font-weight:900;color:var(--gold);text-align:center;margin-bottom:4px;letter-spacing:-1px;}
 .logo span{color:#fff;}
@@ -49,8 +43,6 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-dark);min-heigh
 .remember-row{display:flex;align-items:center;gap:8px;margin-bottom:14px;}
 .remember-row input{width:16px;height:16px;accent-color:var(--bg-mid);cursor:pointer;}
 .remember-row label{font-size:13px;color:var(--text2);cursor:pointer;user-select:none;}
-
-/* ── LOBBY ── */
 #lobbyScreen{flex-direction:column;background:radial-gradient(ellipse at top,#16375c 0%,#0b1f2e 100%);}
 .topbar{background:rgba(0,0,0,.4);padding:11px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.1);}
 .topbar .logo{font-size:18px;margin:0;}
@@ -86,8 +78,6 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-dark);min-heigh
 .btn-join:hover{background:#15803d;}
 .no-rooms{color:rgba(255,255,255,.3);font-size:13px;text-align:center;padding:22px 0;}
 .lobby-footer{text-align:center;color:rgba(255,255,255,.2);font-size:11px;padding:8px;}
-
-/* ── FRIENDS PANEL ── */
 .friends-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;}
 .friends-overlay.show{display:block;}
 .friends-panel{position:fixed;top:0;right:-360px;width:360px;max-width:100vw;height:100vh;background:linear-gradient(180deg,#122d47 0%,#0b1f2e 100%);border-left:1px solid rgba(255,255,255,.08);display:flex;flex-direction:column;transition:right .3s ease;z-index:201;overflow:hidden;}
@@ -120,8 +110,6 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-dark);min-heigh
 .btn-fp-invite{background:var(--gold);color:#1a1a2e;}
 .btn-fp-remove{background:rgba(255,255,255,.07);color:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.12);}
 .fp-empty{color:rgba(255,255,255,.28);font-size:13px;text-align:center;padding:22px 0;}
-
-/* ── INVITE TOAST ── */
 .invite-toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#122d47,#0b1f2e);border:1.5px solid var(--gold);border-radius:14px;padding:14px 18px;max-width:320px;width:90%;box-shadow:0 8px 30px rgba(0,0,0,.5);z-index:300;display:none;}
 .invite-toast.show{display:block;animation:slideUp .3s ease;}
 @keyframes slideUp{from{opacity:0;transform:translateX(-50%) translateY(16px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
@@ -130,8 +118,6 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-dark);min-heigh
 .toast-btns{display:flex;gap:8px;}
 .btn-toast-accept{flex:1;padding:7px;background:var(--green2);color:#fff;border:none;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer;font-family:'Be Vietnam Pro',sans-serif;}
 .btn-toast-decline{flex:1;padding:7px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.15);border-radius:8px;font-weight:700;font-size:12px;cursor:pointer;font-family:'Be Vietnam Pro',sans-serif;}
-
-/* ── ROOM SCREEN ── */
 #roomScreen{flex-direction:column;background:radial-gradient(ellipse at top,#16375c 0%,#0b1f2e 100%);}
 .room-topbar{background:rgba(0,0,0,.4);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.08);}
 .room-title{color:var(--gold);font-weight:800;font-size:15px;}
@@ -162,19 +148,12 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-dark);min-heigh
 .chat-input{flex:1;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:6px 12px;color:#fff;font-size:12px;outline:none;font-family:'Be Vietnam Pro',sans-serif;}
 .chat-input::placeholder{color:rgba(255,255,255,.28);}
 .btn-send{background:var(--bg-mid);color:#fff;border:none;border-radius:7px;padding:6px 13px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Be Vietnam Pro',sans-serif;}
-
-/* ═══════════════════════════════
-   GAME SCREEN
-═══════════════════════════════ */
 #gameScreen{flex-direction:column;background:var(--bg-dark);}
 .game-topbar{background:rgba(0,0,0,.55);padding:8px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0;}
 .game-room-name{color:var(--gold);font-weight:800;font-size:13px;}
 .game-round{color:rgba(255,255,255,.4);font-size:11px;}
 .btn-game-leave{background:rgba(231,76,60,.13);color:#e74c3c;border:1px solid rgba(231,76,60,.22);border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;font-weight:700;font-family:'Be Vietnam Pro',sans-serif;}
-
 .game-body{flex:1;display:flex;flex-direction:column;padding:8px;gap:7px;overflow-y:auto;max-width:500px;margin:0 auto;width:100%;}
-
-/* Opponent area */
 .opp-area{background:rgba(0,0,0,.3);border-radius:12px;padding:10px 12px;}
 .opp-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;}
 .opp-label{color:#fff;font-weight:700;font-size:13px;display:flex;align-items:center;gap:5px;}
@@ -189,8 +168,6 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-dark);min-heigh
 .opp-hand-row{display:flex;flex-wrap:wrap;min-height:48px;align-items:center;padding:3px 2px;gap:2px;}
 .card-back{width:32px;height:48px;border-radius:6px;border:1px solid rgba(255,255,255,.25);background:linear-gradient(135deg,#0e3d5a,#1a5c8c);display:inline-block;flex-shrink:0;margin-left:-14px;box-shadow:1px 1px 3px rgba(0,0,0,.4);}
 .card-back:first-child{margin-left:0;}
-
-/* Table / middle area */
 .table-area{background:var(--bg-felt);border-radius:14px;padding:10px 12px;display:flex;flex-direction:column;align-items:center;gap:7px;box-shadow:inset 0 2px 8px rgba(0,0,0,.3);min-height:130px;}
 .table-status{background:rgba(0,0,0,.45);color:#fff;font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;}
 .phom-rows{width:100%;display:flex;flex-direction:column;gap:6px;}
@@ -199,16 +176,12 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-dark);min-heigh
 .rubbish-row{display:flex;flex-wrap:wrap;gap:4px;align-items:center;min-height:48px;}
 .score-row{display:flex;gap:8px;}
 .score-badge{background:rgba(0,0,0,.35);color:rgba(255,255,255,.65);font-size:11px;padding:3px 10px;border-radius:10px;}
-
-/* Player area */
 .player-area{background:rgba(0,0,0,.25);border-radius:12px;padding:10px 12px;}
 .player-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
 .player-label{color:var(--gold);font-weight:700;font-size:13px;display:flex;align-items:center;gap:5px;}
 .my-turn-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);display:none;}
 .my-turn-dot.active{display:inline-block;animation:pulse 1s infinite;}
 .my-count{color:rgba(255,255,255,.45);font-size:11px;}
-
-/* Card styles */
 .hand-row{display:flex;position:relative;min-height:64px;align-items:flex-end;padding:3px 3px 6px;overflow-x:visible;flex-wrap:wrap;gap:2px;}
 .card{position:relative;width:36px;height:54px;border-radius:8px;border:1.5px solid #ccc;background:#fff;display:inline-flex;flex-direction:column;align-items:center;justify-content:space-between;padding:3px 2px;cursor:pointer;font-size:11px;font-weight:800;user-select:none;transition:transform .12s,box-shadow .12s;flex-shrink:0;margin-left:-14px;box-shadow:1px 1px 4px rgba(0,0,0,.3);font-family:'Be Vietnam Pro',sans-serif;}
 .card:first-child{margin-left:0;}
@@ -220,8 +193,6 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-dark);min-heigh
 .ct{align-self:flex-start;line-height:1.1;font-size:9px;}
 .cm{font-size:13px;line-height:1;}
 .cb{align-self:flex-end;transform:rotate(180deg);line-height:1.1;font-size:9px;}
-
-/* Controls */
 .controls{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;padding:2px 0;}
 .btn-ctrl{padding:7px 13px;border-radius:8px;border:none;font-weight:800;font-size:12px;cursor:pointer;font-family:'Be Vietnam Pro',sans-serif;transition:opacity .15s,transform .1s;letter-spacing:.2px;}
 .btn-ctrl:active{transform:scale(.97);}
@@ -232,19 +203,13 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-dark);min-heigh
 .btn-phom{background:#16a34a;color:#fff;}
 .btn-sort{background:#0891b2;color:#fff;}
 .btn-hint{background:var(--orange);color:#fff;}
-
-/* Phase indicator */
 .phase-bar{display:flex;gap:5px;justify-content:center;padding:2px 0;}
 .phase-dot{font-size:10px;font-weight:700;padding:3px 10px;border-radius:10px;background:rgba(255,255,255,.07);color:rgba(255,255,255,.35);}
 .phase-dot.active{background:rgba(240,180,41,.2);color:var(--gold);}
-
-/* Phom preview */
 .my-phom-preview{background:rgba(0,0,0,.2);border-radius:10px;padding:8px 10px;margin-top:4px;}
 .my-phom-title{color:rgba(255,255,255,.5);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
 .my-phom-row{display:flex;flex-wrap:wrap;gap:6px;}
 .phom-group{display:flex;gap:2px;background:rgba(46,204,113,.08);border:1px solid rgba(46,204,113,.2);border-radius:7px;padding:4px 6px;}
-
-/* Game chat */
 .game-chat{background:rgba(0,0,0,.28);border-radius:12px;overflow:hidden;margin-top:2px;}
 .emoji-bar{display:flex;gap:3px;padding:5px 8px;border-top:1px solid rgba(255,255,255,.05);flex-wrap:wrap;}
 .btn-emoji{background:none;border:none;font-size:15px;cursor:pointer;padding:2px 4px;border-radius:5px;}
@@ -256,8 +221,6 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-dark);min-heigh
 .game-chat-input{flex:1;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.12);border-radius:7px;padding:5px 10px;color:#fff;font-size:12px;outline:none;font-family:'Be Vietnam Pro',sans-serif;}
 .game-chat-input::placeholder{color:rgba(255,255,255,.28);}
 .btn-gchat-send{background:var(--bg-mid);color:#fff;border:none;border-radius:7px;padding:5px 10px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Be Vietnam Pro',sans-serif;}
-
-/* Win Overlay */
 .game-overlay{position:fixed;inset:0;background:rgba(0,0,0,.88);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:100;padding:16px;}
 .game-overlay.show{display:flex;}
 .overlay-card{background:var(--surface);border-radius:20px;padding:24px 28px;text-align:center;max-width:360px;width:92%;box-shadow:0 20px 60px rgba(0,0,0,.5);}
@@ -271,8 +234,6 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-dark);min-heigh
 .result-table .lose-row td{color:#e74c3c;}
 .btn-again{width:100%;padding:12px;background:var(--bg-mid);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:800;font-family:'Be Vietnam Pro',sans-serif;cursor:pointer;}
 .btn-again:hover{background:#1a3a5c;}
-
-/* Stats panel */
 .stats-panel{background:rgba(0,0,0,.28);border-radius:12px;overflow:hidden;}
 .stats-header{display:flex;align-items:center;justify-content:space-between;padding:7px 12px;background:rgba(0,0,0,.18);border-bottom:1px solid rgba(255,255,255,.06);}
 .stats-title{color:rgba(255,255,255,.45);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
@@ -442,7 +403,6 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-dark);min-heigh
     <button class="btn-game-leave" onclick="doLeaveGame()">Rời Game</button>
   </div>
   <div class="game-body">
-    <!-- Opponent -->
     <div class="opp-area" id="oppArea">
       <div class="opp-header">
         <div class="opp-label">
@@ -453,11 +413,8 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-dark);min-heigh
         <div class="opp-count" id="oppCount">-- lá</div>
       </div>
       <div class="opp-hand-row" id="oppHand"></div>
-      <!-- Opp phom preview (shown when revealed) -->
       <div id="oppPhomPreview" style="display:none;margin-top:6px;"></div>
     </div>
-
-    <!-- Table -->
     <div class="table-area">
       <div class="table-status" id="gameStatus">Đang tải...</div>
       <div class="phom-rows" id="tablePhomRows" style="width:100%;"></div>
@@ -467,8 +424,6 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-dark);min-heigh
       </div>
       <div class="score-row" id="scoresDisplay"></div>
     </div>
-
-    <!-- Player area -->
     <div class="player-area">
       <div class="player-header">
         <div class="player-label">
@@ -479,14 +434,11 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-dark);min-heigh
         <div class="my-count" id="myCount">-- lá</div>
       </div>
       <div class="hand-row" id="myHand"></div>
-
-      <!-- Phase indicators -->
       <div class="phase-bar" id="phaseBar">
         <div class="phase-dot" id="phDraw">① Rút bài</div>
         <div class="phase-dot" id="phPhom">② Hạ phỏm</div>
         <div class="phase-dot" id="phDiscard">③ Đánh bài</div>
       </div>
-
       <div class="controls" id="mainControls">
         <button class="btn-ctrl btn-draw-deck" id="btnDrawDeck" onclick="doDrawDeck()">⬇ Rút hốc</button>
         <button class="btn-ctrl btn-draw-rubbish" id="btnDrawRubbish" onclick="doDrawRubbish()">⬆ Rút rác</button>
@@ -495,15 +447,11 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-dark);min-heigh
         <button class="btn-ctrl btn-sort" onclick="sortHand()">⬇ Sắp xếp</button>
         <button class="btn-ctrl btn-hint" onclick="doHint()">💡 Gợi ý</button>
       </div>
-
-      <!-- My phom preview -->
       <div class="my-phom-preview" id="myPhomPreview" style="display:none;">
         <div class="my-phom-title">🃏 Phỏm đã hạ của bạn</div>
         <div class="my-phom-row" id="myPhomRow"></div>
       </div>
     </div>
-
-    <!-- Stats -->
     <div class="stats-panel" id="statsPanel">
       <div class="stats-header">
         <span class="stats-title">📊 Thống kê phiên</span>
@@ -513,8 +461,6 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-dark);min-heigh
         <div class="stats-scores" id="statsScores"></div>
       </div>
     </div>
-
-    <!-- Chat -->
     <div class="game-chat">
       <div class="emoji-bar">
         <button class="btn-emoji" onclick="sendGameEmoji('😂')">😂</button>
@@ -549,10 +495,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg-dark);min-heigh
 </div>
 
 <script>
-// ── VIBRATION ──
 function vib(p){if(navigator.vibrate)try{navigator.vibrate(p);}catch(e){}}
-
-// ── FX CANVAS ──
 const FX=(()=>{
   const cv=document.getElementById('fxCanvas');const ctx=cv.getContext('2d');
   let parts=[];let raf=null;
@@ -563,8 +506,6 @@ const FX=(()=>{
   function loop(){ctx.clearRect(0,0,cv.width,cv.height);parts=parts.filter(p=>!p.dead());parts.forEach(p=>{p.update();p.draw();});if(parts.length)raf=requestAnimationFrame(loop);else raf=null;}
   return{burst(t,n){n=n||16;for(let i=0;i<n;i++)parts.push(new P(t));if(!raf)raf=requestAnimationFrame(loop);}};
 })();
-
-// ── SFX ──
 const SFX=(()=>{
   let ctx=null;let _turnB=null,_turnT=null,_lastT=-1;
   function ac(){if(!ctx)ctx=new(window.AudioContext||window.webkitAudioContext)();if(ctx.state==='suspended')ctx.resume();return ctx;}
@@ -594,7 +535,6 @@ const SFX=(()=>{
     resetT(){_lastT=-1;}
   };
 })();
-
 function showTurnToast(msg){const t=document.getElementById('turnToast');if(!t)return;t.textContent=msg;t.className='turn-toast show';setTimeout(()=>{t.className='turn-toast';},2400);}
 function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 </script>
@@ -845,13 +785,16 @@ function renderRoom(room){
 }
 
 window.doReady=async function(){SFX.click();await dbUpd('rooms/'+App.currentRoom,{[`ready/${App.mySlot}`]:true});};
+
 window.doStartGame=async function(){
-  SFX.click();const room=await dbGet('rooms/'+App.currentRoom);if(!room)return;
+  SFX.click();
+  const room=await dbGet('rooms/'+App.currentRoom);if(!room)return;
   const newRound=room.round||1;
   const gs=createPhomState(room.players,room.playerDisplays,newRound,null);
   await dbUpd('rooms/'+App.currentRoom,{gameState:gs,status:'playing'});
-  // Không gọi enterGame ở đây — để startRoomListener tự detect status='playing' và gọi
+  // Không gọi enterGame ở đây — để startRoomListener tự detect status='playing'
 };
+
 window.doLeaveRoom=async function(){
   SFX.click();const room=await dbGet('rooms/'+App.currentRoom);
   if(room){
@@ -865,6 +808,7 @@ window.doLeaveRoom=async function(){
   }
   detachAll();App.currentRoom=null;App.mySlot=-1;showLobby();
 };
+
 window.sendChat=async function(){
   const inp=document.getElementById('chatInput');const text=inp.value.trim();if(!text)return;
   const room=await dbGet('rooms/'+App.currentRoom);if(!room)return;
@@ -880,81 +824,41 @@ const SUITS=['s','c','d','h'];
 const SUIT_SYM={s:'♠',c:'♣',d:'♦',h:'♥'};
 const TURN_LIMIT=30;
 
-// Điểm rác
 function cardPoints(c){
   if(['J','Q','K','10'].includes(c.r))return 10;
   if(c.r==='A')return 1;
   return parseInt(c.r);
 }
-
-function makeDeck(){
-  const d=[];for(const s of SUITS)for(const r of RANKS)d.push({r,s});return d;
-}
-function shuffle(deck){
-  const d=deck.slice();for(let i=d.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[d[i],d[j]]=[d[j],d[i]];}return d;
-}
+function makeDeck(){const d=[];for(const s of SUITS)for(const r of RANKS)d.push({r,s});return d;}
+function shuffle(deck){const d=deck.slice();for(let i=d.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[d[i],d[j]]=[d[j],d[i]];}return d;}
 function cardVal(c){return RANKS.indexOf(c.r)*4+SUITS.indexOf(c.s);}
 function sortCards(cards){return cards.slice().sort((a,b)=>cardVal(a)-cardVal(b));}
 window.sortCards=sortCards;
 
-// Tìm phỏm từ danh sách bài
 function findPhoms(cards){
   const groups=[];
-  // Tứ quý / ba cây cùng hàng
   const byRank={};cards.forEach((c,i)=>{if(!byRank[c.r])byRank[c.r]=[];byRank[c.r].push(i);});
   for(const r of Object.keys(byRank)){
     if(byRank[r].length>=3){
-      // 3 cây
       for(let a=0;a<byRank[r].length-2;a++)for(let b=a+1;b<byRank[r].length-1;b++)for(let cc=b+1;cc<byRank[r].length;cc++)
         groups.push([byRank[r][a],byRank[r][b],byRank[r][cc]]);
       if(byRank[r].length>=4)groups.push(byRank[r].slice(0,4));
     }
   }
-  // Sảnh cùng chất 3-5 lá
   const bySuit={};cards.forEach((c,i)=>{if(!bySuit[c.s])bySuit[c.s]=[];bySuit[c.s].push({i,ri:RANKS.indexOf(c.r)});});
   for(const s of Object.keys(bySuit)){
     const sc=bySuit[s].sort((a,b)=>a.ri-b.ri);
-    // sliding window sảnh 3-5 lá
     for(let len=5;len>=3;len--){
       for(let start=0;start<=sc.length-len;start++){
-        const window=sc.slice(start,start+len);
-        let ok=true;for(let k=1;k<window.length;k++)if(window[k].ri-window[k-1].ri!==1){ok=false;break;}
-        if(ok)groups.push(window.map(x=>x.i));
+        const win=sc.slice(start,start+len);
+        let ok=true;for(let k=1;k<win.length;k++)if(win[k].ri-win[k-1].ri!==1){ok=false;break;}
+        if(ok)groups.push(win.map(x=>x.i));
       }
     }
   }
   return groups;
 }
 
-// Tìm phỏm tốt nhất (ít rác nhất sau khi hạ)
-function bestPhomSet(cards){
-  const combos=findPhoms(cards);
-  if(!combos.length)return[];
-  // Greedy: lấy phỏm không chồng chéo giảm điểm rác nhiều nhất
-  let best=[];let bestRubbish=cards.reduce((s,c)=>s+cardPoints(c),0);
-  // Try each single phom first
-  for(const ph of combos){
-    const used=new Set(ph);
-    const remain=cards.filter((_,i)=>!used.has(i));
-    // Now try second phom from remain
-    const remain2ndIdx=remain.map((_,i)=>i);
-    const combos2=findPhoms(remain);
-    let localPhoms=[ph],localRemain=remain;
-    for(const ph2 of combos2){
-      const used2=new Set(ph2);const r2=remain.filter((_,i)=>!used2.has(i));
-      const rub=r2.reduce((s,c)=>s+cardPoints(c),0);
-      if(rub<localRemain.reduce((s,c)=>s+cardPoints(c),0)){
-        localPhoms=[ph,ph2.map(j=>remain2ndIdx[j])];
-        localRemain=r2;
-      }
-    }
-    const rubScore=localRemain.reduce((s,c)=>s+cardPoints(c),0);
-    if(rubScore<bestRubbish){bestRubbish=rubScore;best=localPhoms;}
-  }
-  return best;
-}
-
-// Kiểm tra ù: tất cả bài đều nằm trong phỏm (0 rác)
 function checkU(hand){
   if(hand.length!==9&&hand.length!==10)return false;
   const phoms=findPhoms(hand);
@@ -965,36 +869,47 @@ function checkU(hand){
   return false;
 }
 
+// ── createPhomState: tạo trạng thái game mới ──
 function createPhomState(players,displays,round,firstPlayer){
   const fullDeck=shuffle(makeDeck());
   const h0=sortCards(fullDeck.slice(0,9));
   const h1=sortCards(fullDeck.slice(9,18));
   const deck=fullDeck.slice(18);
-  const fp=firstPlayer!==null&&firstPlayer!==undefined&&firstPlayer>=0?firstPlayer:0;
-  return{
+  const fp=(firstPlayer!==null&&firstPlayer!==undefined&&firstPlayer>=0)?firstPlayer:0;
+  return {
     hands:{"0":h0,"1":h1},
     deck:deck,
     rubbish:[],
     laidPhoms:{"0":[],"1":[]},
     turn:fp,
     phase:'draw',
-    gameOver:false,winner:-1,
-    scores:{"0":0,"1":0},round:round||1,
+    gameOver:false,
+    winner:-1,
+    scores:{"0":0,"1":0},
+    round:round||1,
     turnStartAt:Date.now(),
     passedCount:0
   };
 }
 
-// ── Normalize gameState from Firebase (string keys → proper arrays) ──
+// ── toArr: Firebase object → array ──
+function toArr(v){
+  if(!v)return[];
+  if(Array.isArray(v))return v;
+  return Object.keys(v).sort((a,b)=>+a-+b).map(k=>v[k]);
+}
+
+// ── normalizeGs: chuẩn hóa gameState từ Firebase ──
 function normalizeGs(raw){
-  function toArr(v){if(!v)return[];if(Array.isArray(v))return v;return Object.keys(v).sort((a,b)=>+a-+b).map(k=>v[k]);}
-  const h0=toArr(raw.hands&&(raw.hands[0]!==undefined?raw.hands[0]:raw.hands["0"]));
-  const h1=toArr(raw.hands&&(raw.hands[1]!==undefined?raw.hands[1]:raw.hands["1"]));
-  const lp0=toArr(raw.laidPhoms&&(raw.laidPhoms[0]!==undefined?raw.laidPhoms[0]:raw.laidPhoms["0"])).map(toArr);
-  const lp1=toArr(raw.laidPhoms&&(raw.laidPhoms[1]!==undefined?raw.laidPhoms[1]:raw.laidPhoms["1"])).map(toArr);
+  const h0raw=raw.hands?(raw.hands['0']!==undefined?raw.hands['0']:raw.hands[0]):null;
+  const h1raw=raw.hands?(raw.hands['1']!==undefined?raw.hands['1']:raw.hands[1]):null;
+  const lp0raw=raw.laidPhoms?(raw.laidPhoms['0']!==undefined?raw.laidPhoms['0']:raw.laidPhoms[0]):null;
+  const lp1raw=raw.laidPhoms?(raw.laidPhoms['1']!==undefined?raw.laidPhoms['1']:raw.laidPhoms[1]):null;
+  const sc0=raw.scores?(raw.scores['0']!==undefined?raw.scores['0']:raw.scores[0]):0;
+  const sc1=raw.scores?(raw.scores['1']!==undefined?raw.scores['1']:raw.scores[1]):0;
   return{
     turn:raw.turn!==undefined?+raw.turn:0,
-    phase:raw.phase||"draw",
+    phase:raw.phase||'draw',
     gameOver:!!raw.gameOver,
     winner:raw.winner!==undefined?+raw.winner:-1,
     turnStartAt:raw.turnStartAt||Date.now(),
@@ -1002,21 +917,25 @@ function normalizeGs(raw){
     round:raw.round||1,
     deck:toArr(raw.deck),
     rubbish:toArr(raw.rubbish),
-    scores:[+(raw.scores&&(raw.scores[0]!==undefined?raw.scores[0]:raw.scores["0"])||0),+(raw.scores&&(raw.scores[1]!==undefined?raw.scores[1]:raw.scores["1"])||0)],
-    hands:[h0,h1],
-    laidPhoms:[lp0,lp1]
+    scores:[+sc0,+sc1],
+    hands:[toArr(h0raw),toArr(h1raw)],
+    laidPhoms:[toArr(lp0raw).map(toArr),toArr(lp1raw).map(toArr)]
   };
 }
+
+// ── gsToFb: convert gameState về format Firebase ──
 function gsToFb(gs){
-  return{turn:gs.turn,phase:gs.phase,gameOver:gs.gameOver,winner:gs.winner,
+  return{
+    turn:gs.turn,phase:gs.phase,gameOver:gs.gameOver,winner:gs.winner,
     turnStartAt:gs.turnStartAt,passedCount:gs.passedCount||0,round:gs.round,
     deck:gs.deck,rubbish:gs.rubbish,
     scores:{"0":gs.scores[0],"1":gs.scores[1]},
     hands:{"0":gs.hands[0],"1":gs.hands[1]},
-    laidPhoms:{"0":gs.laidPhoms[0],"1":gs.laidPhoms[1]}};
+    laidPhoms:{"0":gs.laidPhoms[0],"1":gs.laidPhoms[1]}
+  };
 }
 
-// HTML cho 1 lá bài
+// ── cardHTML ──
 function cardHTML(c,idx,clickable,extraClass=""){
   const red=['d','h'].includes(c.s);
   const sym=SUIT_SYM[c.s];
@@ -1033,11 +952,11 @@ let _winShown=false,_prevTurnSlot=-1;
 
 function enterGame(room){
   detachAll();SFX.resetT();
+  // Luôn xác định lại mySlot từ danh sách players
   if(room.players){
     const idx=room.players.indexOf(App.currentUser.username);
     if(idx>=0)App.mySlot=idx;
   }
-  console.log('enterGame mySlot=',App.mySlot,'players=',room.players,'me=',App.currentUser.username);
   document.getElementById('gameRoomName').textContent='🃏 '+room.name;
   document.getElementById('gameRound').textContent='Ván '+(room.round||1);
   App.selected=new Set();App.lastGChatCount=0;_winShown=false;_prevTurnSlot=-1;_prevRoomPC=2;
@@ -1058,47 +977,18 @@ function startGameListener(){
 
 function renderGame(room){
   if(!room||!room.gameState)return;
-  // Fix mySlot if lost (e.g. after rejoin)
-  if(App.mySlot<0&&room.players){
-    const idx=room.players.indexOf(App.currentUser.username);
-    if(idx>=0)App.mySlot=idx;
-  }
-  window._lastRoom=room;
 
-  // ── Normalize everything from Firebase (objects with string keys → arrays) ──
-  function toArr(v){if(!v)return[];if(Array.isArray(v))return v;return Object.keys(v).sort((a,b)=>+a-+b).map(k=>v[k]);}
-
-  const rawGs=room.gameState;
-  // Build a clean normalized gameState object
-  const h0raw=rawGs.hands?(rawGs.hands['0']!==undefined?rawGs.hands['0']:(rawGs.hands[0]!==undefined?rawGs.hands[0]:null)):null;
-  const h1raw=rawGs.hands?(rawGs.hands['1']!==undefined?rawGs.hands['1']:(rawGs.hands[1]!==undefined?rawGs.hands[1]:null)):null;
-
-  const gs={
-    turn:rawGs.turn!==undefined?+rawGs.turn:0,
-    phase:rawGs.phase||'draw',
-    gameOver:!!rawGs.gameOver,
-    winner:rawGs.winner!==undefined?+rawGs.winner:-1,
-    turnStartAt:rawGs.turnStartAt||Date.now(),
-    passedCount:rawGs.passedCount||0,
-    round:rawGs.round||1,
-    deck:toArr(rawGs.deck),
-    rubbish:toArr(rawGs.rubbish),
-    scores:[
-      +(rawGs.scores&&(rawGs.scores['0']!==undefined?rawGs.scores['0']:rawGs.scores[0])||0),
-      +(rawGs.scores&&(rawGs.scores['1']!==undefined?rawGs.scores['1']:rawGs.scores[1])||0)
-    ],
-    hands:[toArr(h0raw),toArr(h1raw)],
-    laidPhoms:[
-      toArr(rawGs.laidPhoms&&(rawGs.laidPhoms['0']!==undefined?rawGs.laidPhoms['0']:rawGs.laidPhoms[0])).map(toArr),
-      toArr(rawGs.laidPhoms&&(rawGs.laidPhoms['1']!==undefined?rawGs.laidPhoms['1']:rawGs.laidPhoms[1])).map(toArr)
-    ]
-  };
-    
-// Fix mySlot nếu bị -1 hoặc sai
+  // Đảm bảo mySlot luôn đúng
   if(App.mySlot<0||!room.players||room.players[App.mySlot]!==App.currentUser.username){
     const idx=room.players?room.players.indexOf(App.currentUser.username):-1;
     if(idx>=0)App.mySlot=idx;
   }
+  if(App.mySlot<0)return; // Không tìm được slot, bỏ qua
+
+  window._lastRoom=room;
+
+  // Normalize gameState
+  const gs=normalizeGs(room.gameState);
 
   const my=App.mySlot,op=1-my;
   const hands=gs.hands;
@@ -1106,11 +996,12 @@ function renderGame(room){
   const scores=gs.scores;
   const rubbish=gs.rubbish;
   const deck=gs.deck;
+
   document.getElementById('oppNameLabel').textContent=room.playerDisplays[op]||'Đối thủ';
   document.getElementById('myNameLabel').textContent=room.playerDisplays[my]||'Bạn';
   document.getElementById('gameRound').textContent='Ván '+(room.round||1);
 
-  // Opponent hand
+  // Bài đối thủ
   const oppCards=hands[op]||[];
   const oppHandEl=document.getElementById('oppHand');
   if(gs.gameOver){
@@ -1122,26 +1013,26 @@ function renderGame(room){
       oppPhomPrev.innerHTML='<div style="color:rgba(255,255,255,.45);font-size:10px;font-weight:700;text-transform:uppercase;margin-bottom:4px;">Phỏm đã hạ</div>'
         +oppPhoms.map(ph=>`<div class="phom-group">${toArr(ph).map(c=>cardHTML(c,-1,false,'inphom')).join('')}</div>`).join('');
     }
-  } else {
+  }else{
     oppHandEl.innerHTML=oppCards.length?oppCards.map(()=>'<div class="card-back"></div>').join(''):'<span style="color:rgba(255,255,255,.25);font-size:11px;">Hết bài</span>';
     document.getElementById('oppPhomPreview').style.display='none';
   }
   document.getElementById('oppCount').textContent=oppCards.length+' lá';
 
-  // Table phom rows
+  // Phỏm trên bàn
   const tPhomEl=document.getElementById('tablePhomRows');
-  const allPhoms=[...laidPhoms[0],...laidPhoms[1]];
+  const allPhoms=[...(laidPhoms[0]||[]),...(laidPhoms[1]||[])];
   if(allPhoms.length){
     tPhomEl.innerHTML=`<div class="phom-row-label">🃏 Phỏm đã hạ</div><div class="phom-row">${allPhoms.map(ph=>`<div class="phom-group">${toArr(ph).map(c=>cardHTML(c,-1,false,'inphom')).join('')}</div>`).join('')}</div>`;
-  } else {
+  }else{
     tPhomEl.innerHTML='<div style="color:rgba(255,255,255,.25);font-size:11px;text-align:center;padding:4px 0;">Chưa có phỏm nào được hạ</div>';
   }
 
-  // Rubbish pile
+  // Bài rác
   const rubEl=document.getElementById('tableRubbish');
   if(rubbish.length){
     rubEl.innerHTML=rubbish.slice(-5).map((c,i)=>cardHTML(c,i,false)).join('');
-  } else {
+  }else{
     rubEl.innerHTML='<span style="color:rgba(255,255,255,.25);font-size:11px;">Chưa có</span>';
   }
 
@@ -1151,10 +1042,10 @@ function renderGame(room){
   if(gs.gameOver){
     const wn=gs.winner===my?'BẠN':(room.playerDisplays[op]||'Đối thủ');
     statusEl.textContent=wn+' THẮNG VÁN NÀY!';
-  } else if(myTurn){
+  }else if(myTurn){
     const phaseText={draw:'Lượt bạn — Rút bài',phom:'Bạn — Hạ phỏm / Ăn',discard:'Bạn — Đánh bài'};
     statusEl.textContent='👆 '+(phaseText[gs.phase]||'Lượt bạn');
-  } else {
+  }else{
     statusEl.textContent='⏳ '+(room.playerDisplays[op]||'Đối thủ')+' đang suy nghĩ...';
   }
 
@@ -1164,7 +1055,7 @@ function renderGame(room){
     if(el)el.className='phase-dot'+(myTurn&&gs.phase===p?' active':'');
   });
 
-  // Scores display
+  // Scores
   document.getElementById('scoresDisplay').innerHTML=scores.map((s,i)=>{
     const n=i===my?'Bạn':(room.playerDisplays[op]||'Đối thủ');
     return`<span class="score-badge">${n}: ${s} thắng</span>`;
@@ -1173,7 +1064,7 @@ function renderGame(room){
   // Stats
   renderStats(scores,room.playerDisplays,my,room.round||1);
 
-  // My hand
+  // Bài của mình
   const myCards=hands[my]||[];
   const interactable=myTurn&&!gs.gameOver;
   document.getElementById('myHand').innerHTML=myCards.length
@@ -1181,13 +1072,13 @@ function renderGame(room){
     :'<span style="color:rgba(255,255,255,.35);font-size:12px;">Bạn chưa có bài</span>';
   document.getElementById('myCount').textContent=myCards.length+' lá';
 
-  // My laid phoms preview
+  // Phỏm đã hạ của mình
   const myPhoms=laidPhoms[my]||[];
   const myPhomPrev=document.getElementById('myPhomPreview');
   if(myPhoms.length){
     myPhomPrev.style.display='';
     document.getElementById('myPhomRow').innerHTML=myPhoms.map(ph=>`<div class="phom-group">${toArr(ph).map(c=>cardHTML(c,-1,false,'inphom')).join('')}</div>`).join('');
-  } else {
+  }else{
     myPhomPrev.style.display='none';
   }
 
@@ -1242,13 +1133,13 @@ function calcRubbish(hand){
   return hand.reduce((s,c)=>s+cardPoints(c),0);
 }
 
-function renderStats(gs,displays,mySlot){
+function renderStats(scores,displays,mySlot,round){
   const op=1-mySlot;
-  document.getElementById('statsTotalRounds').textContent=(gs.round||1)+' ván';
+  document.getElementById('statsTotalRounds').textContent=round+' ván';
   const colors=['#f0b429','#2ecc71'];
-  document.getElementById('statsScores').innerHTML=[mySlot,op].map(slot=>{
+  document.getElementById('statsScores').innerHTML=[mySlot,op].map((slot,ci)=>{
     const nm=displays[slot]||'P'+(slot+1);
-    return`<div class="stats-score-box"><div class="stats-score-name">${escHtml(nm)}</div><div class="stats-score-num" style="color:${colors[slot===mySlot?0:1]}">${gs.scores[slot]}</div><div class="stats-score-sub">ván thắng</div></div>`;
+    return`<div class="stats-score-box"><div class="stats-score-name">${escHtml(nm)}</div><div class="stats-score-num" style="color:${colors[ci]}">${scores[slot]}</div><div class="stats-score-sub">ván thắng</div></div>`;
   }).join('');
 }
 
@@ -1261,19 +1152,15 @@ window.toggleCard=function(i){
     el.className=el.className.replace(' sel','')+(isSel?' sel':'');
     el.style.transform=isSel?'translateY(-16px)':'';
   });
-  // Update btn states immediately
   const room_=window._lastRoom;const gs_=room_&&room_.gameState;
   if(gs_){
-    const canPhom=(gs_.turn===App.mySlot)&&(gs_.phase==='phom'||gs_.phase==='draw')&&!gs_.gameOver;
-    const canDiscard=(gs_.turn===App.mySlot)&&(gs_.phase==='discard'||gs_.phase==='phom')&&!gs_.gameOver;
+    const t=gs_.turn!==undefined?+gs_.turn:0;
+    const canPhom=(t===App.mySlot)&&(gs_.phase==='phom'||gs_.phase==='draw')&&!gs_.gameOver;
+    const canDiscard=(t===App.mySlot)&&(gs_.phase==='discard'||gs_.phase==='phom')&&!gs_.gameOver;
     document.getElementById('btnPhom').disabled=!canPhom||App.selected.size<3;
     document.getElementById('btnDiscard').disabled=!canDiscard||App.selected.size!==1;
   }
 };
-
-// Lưu room state cục bộ để toggle button work
-let _liveRoom=null;
-const origRenderGame=renderGame;
 
 // ── DRAW DECK ──
 window.doDrawDeck=async function(){
@@ -1285,7 +1172,7 @@ window.doDrawDeck=async function(){
   gs.hands[App.mySlot].push(drawn);
   if(checkU(gs.hands[App.mySlot])){
     gs.gameOver=true;gs.winner=App.mySlot;gs.scores[App.mySlot]++;
-    gs.laidPhoms[App.mySlot]=[...findBestPhomGroups(gs.hands[App.mySlot])];
+    gs.laidPhoms[App.mySlot]=findBestPhomGroups(gs.hands[App.mySlot]);
     gs.hands[App.mySlot]=[];
     await dbUpd('rooms/'+App.currentRoom,{gameState:gsToFb(gs)});return;
   }
@@ -1304,7 +1191,7 @@ window.doDrawRubbish=async function(){
   gs.hands[App.mySlot].push(drawn);
   if(checkU(gs.hands[App.mySlot])){
     gs.gameOver=true;gs.winner=App.mySlot;gs.scores[App.mySlot]++;
-    gs.laidPhoms[App.mySlot]=[...findBestPhomGroups(gs.hands[App.mySlot])];
+    gs.laidPhoms[App.mySlot]=findBestPhomGroups(gs.hands[App.mySlot]);
     gs.hands[App.mySlot]=[];
     await dbUpd('rooms/'+App.currentRoom,{gameState:gsToFb(gs)});return;
   }
@@ -1315,7 +1202,7 @@ window.doDrawRubbish=async function(){
 
 // ── HẠ PHỎM ──
 window.doLayPhom=async function(){
-  const sel=Array.from(App.selected);if(sel.length<3){return;}
+  const sel=Array.from(App.selected);if(sel.length<3)return;
   const room=await dbGet('rooms/'+App.currentRoom);if(!room||!room.gameState)return;
   const gs=normalizeGs(room.gameState);
   if(gs.turn!==App.mySlot||(gs.phase!=='phom'&&gs.phase!=='draw')||gs.gameOver)return;
@@ -1329,7 +1216,7 @@ window.doLayPhom=async function(){
   App.selected=new Set();
   if(gs.hands[App.mySlot].length===0){
     gs.gameOver=true;gs.winner=App.mySlot;gs.scores[App.mySlot]++;
-  } else {
+  }else{
     gs.phase='phom';
   }
   await dbUpd('rooms/'+App.currentRoom,{gameState:gsToFb(gs)});
@@ -1372,7 +1259,6 @@ window.doHint=async function(){
   const hand=gs.hands[App.mySlot];
   const phomIdxGroups=findPhoms(hand);
   if(phomIdxGroups.length){
-    // Highlight first group
     App.selected=new Set(phomIdxGroups[0]);
     document.getElementById('myHand').querySelectorAll('.card').forEach((el,i)=>{
       const s=App.selected.has(i);
@@ -1380,9 +1266,8 @@ window.doHint=async function(){
       el.style.transform=s?'translateY(-16px)':'';
     });
     showGameStatus('💡 Phỏm gợi ý: '+phomIdxGroups[0].length+' lá được chọn!');
-  } else {
+  }else{
     showGameStatus('Không tìm thấy phỏm — hãy đánh bài rác nhất!');
-    // Suggest highest point card
     let maxPts=0,maxIdx=0;
     hand.forEach((c,i)=>{const p=cardPoints(c);if(p>maxPts){maxPts=p;maxIdx=i;}});
     App.selected=new Set([maxIdx]);
@@ -1396,14 +1281,11 @@ window.doHint=async function(){
 
 function showGameStatus(msg){document.getElementById('gameStatus').textContent=msg;}
 
-// ── Kiểm tra phỏm hợp lệ ──
 function isValidPhom(cards){
   if(cards.length<3||cards.length>4)return false;
   const sorted=sortCards(cards);
   const ranks=sorted.map(c=>c.r),suits=sorted.map(c=>c.s);
-  // Cùng hàng
   if(new Set(ranks).size===1)return true;
-  // Sảnh cùng chất
   if(new Set(suits).size===1){
     const ri=sorted.map(c=>RANKS.indexOf(c.r));
     let ok=true;for(let i=1;i<ri.length;i++)if(ri[i]-ri[i-1]!==1){ok=false;break;}
@@ -1412,7 +1294,6 @@ function isValidPhom(cards){
   return false;
 }
 
-// Helper để hạ toàn bộ phỏm khi ù
 function findBestPhomGroups(hand){
   const idxGroups=findPhoms(hand);const used=new Set();const result=[];
   for(const g of idxGroups){if(g.every(i=>!used.has(i))){g.forEach(i=>used.add(i));result.push(g.map(i=>hand[i]));if(used.size>=hand.length)break;}}
@@ -1425,11 +1306,12 @@ window.doNewRound=async function(){
   _winShown=false;_prevTurnSlot=-1;
   const room=await dbGet('rooms/'+App.currentRoom);if(!room)return;
   const prevGs=room.gameState;
-  const scores=prevGs&&prevGs.scores?prevGs.scores:[0,0];
-  const lw=prevGs&&prevGs.winner>=0?prevGs.winner:null;
+  const oldScores=prevGs&&prevGs.scores?prevGs.scores:{"0":0,"1":0};
+  const lw=prevGs&&prevGs.winner>=0?+prevGs.winner:null;
   const newRound=(room.round||1)+1;
   const newGs=createPhomState(room.players,room.playerDisplays,newRound,lw);
-  newGs.scores=scores;
+  // Giữ lại điểm số cũ
+  newGs.scores={"0":+(oldScores['0']!==undefined?oldScores['0']:oldScores[0])||0,"1":+(oldScores['1']!==undefined?oldScores['1']:oldScores[1])||0};
   SFX.resetT();
   await dbUpd('rooms/'+App.currentRoom,{gameState:newGs,status:'playing',round:newRound});
   App.selected=new Set();
@@ -1442,7 +1324,9 @@ window.doLeaveGame=async function(){
   const room=await dbGet('rooms/'+App.currentRoom);
   if(room&&room.gameState){
     const newGs=JSON.parse(JSON.stringify(room.gameState));
-    newGs.gameOver=true;newGs.winner=1-App.mySlot;newGs.scores[1-App.mySlot]=(newGs.scores[1-App.mySlot]||0)+1;
+    newGs.gameOver=true;newGs.winner=1-App.mySlot;
+    const winnerKey=String(1-App.mySlot);
+    newGs.scores[winnerKey]=(+(newGs.scores&&(newGs.scores[winnerKey]!==undefined?newGs.scores[winnerKey]:0))||0)+1;
     await dbUpd('rooms/'+App.currentRoom,{gameState:newGs,status:'closed'});
   }
   detachAll();App.currentRoom=null;App.mySlot=-1;showLobby();
@@ -1479,7 +1363,7 @@ function _runTimer(isMyTurn,turnStartAt,turnSlot){
       if(myEl){myEl.textContent=left;myEl.className='turn-timer'+(urgent?' urgent':'');}
       if(urgent&&left>0&&left!==_lastTickSec){_lastTickSec=left;if(left<=5)SFX.tick();}
       if(left<=0&&!_forceDiscardFired){_forceDiscardFired=true;_autoDiscard();return;}
-    } else {
+    }else{
       if(oppEl){oppEl.textContent=left;oppEl.className='turn-timer'+(urgent?' urgent':'');}
     }
     _timerRaf=requestAnimationFrame(tick);
@@ -1489,29 +1373,39 @@ function _runTimer(isMyTurn,turnStartAt,turnSlot){
 
 async function _autoDiscard(){
   const room=await dbGet('rooms/'+App.currentRoom);if(!room||!room.gameState)return;
-  const gs=room.gameState;if(gs.turn!==App.mySlot||gs.gameOver)return;
+  const gs=room.gameState;if(+gs.turn!==App.mySlot||gs.gameOver)return;
   const elapsed=Math.floor((Date.now()-(gs.turnStartAt||Date.now()))/1000);
   if(elapsed<TURN_LIMIT-1)return;
-  // Tự động draw nếu cần
   if(gs.phase==='draw'){
     const newGs=JSON.parse(JSON.stringify(gs));
-    if(newGs.deck&&newGs.deck.length){const drawn=newGs.deck.shift();newGs.hands[App.mySlot].push(drawn);}
+    const deck=toArr(newGs.deck);
+    const myKey=String(App.mySlot);
+    const hand=toArr(newGs.hands&&(newGs.hands[myKey]!==undefined?newGs.hands[myKey]:newGs.hands[App.mySlot]));
+    if(deck.length){hand.push(deck.shift());}
+    newGs.deck=deck;newGs.hands[myKey]=hand;
     newGs.phase='discard';newGs.turnStartAt=Date.now();
     await dbUpd('rooms/'+App.currentRoom,{gameState:newGs});return;
   }
   if(gs.phase==='discard'||gs.phase==='phom'){
     const newGs=JSON.parse(JSON.stringify(gs));
-    if(newGs.hands[App.mySlot].length){
-      // Đánh lá có điểm cao nhất
+    const myKey=String(App.mySlot);
+    const hand=toArr(newGs.hands&&(newGs.hands[myKey]!==undefined?newGs.hands[myKey]:newGs.hands[App.mySlot]));
+    const rubbish=toArr(newGs.rubbish)||[];
+    if(hand.length){
       let maxPts=0,maxIdx=0;
-      newGs.hands[App.mySlot].forEach((c,i)=>{const p=cardPoints(c);if(p>maxPts){maxPts=p;maxIdx=i;}});
-      const disc=newGs.hands[App.mySlot].splice(maxIdx,1)[0];
-      newGs.rubbish=newGs.rubbish||[];newGs.rubbish.push(disc);
+      hand.forEach((c,i)=>{const p=cardPoints(c);if(p>maxPts){maxPts=p;maxIdx=i;}});
+      const disc=hand.splice(maxIdx,1)[0];rubbish.push(disc);
     }
+    newGs.hands[myKey]=hand;newGs.rubbish=rubbish;
     newGs.turn=1-App.mySlot;newGs.phase='draw';newGs.turnStartAt=Date.now();
-    if(!newGs.deck||!newGs.deck.length){
-      const myPts=calcRubbish(newGs.hands[App.mySlot]);const opPts=calcRubbish(newGs.hands[1-App.mySlot]);
-      newGs.gameOver=true;newGs.winner=myPts<=opPts?App.mySlot:(1-App.mySlot);newGs.scores[newGs.winner]=(newGs.scores[newGs.winner]||0)+1;
+    const deck=toArr(newGs.deck);
+    if(!deck.length){
+      const opKey=String(1-App.mySlot);
+      const opHand=toArr(newGs.hands&&(newGs.hands[opKey]!==undefined?newGs.hands[opKey]:newGs.hands[1-App.mySlot]));
+      const myPts=calcRubbish(hand);const opPts=calcRubbish(opHand);
+      newGs.gameOver=true;newGs.winner=myPts<=opPts?App.mySlot:(1-App.mySlot);
+      const wKey=String(newGs.winner);
+      newGs.scores[wKey]=(+(newGs.scores&&(newGs.scores[wKey]!==undefined?newGs.scores[wKey]:0))||0)+1;
     }
     App.selected=new Set();
     await dbUpd('rooms/'+App.currentRoom,{gameState:newGs});
