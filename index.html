@@ -962,24 +962,22 @@ function checkU(hand){
 
 function createPhomState(players,displays,round,firstPlayer){
   const fullDeck=shuffle(makeDeck());
-  // Mỗi người 9 lá, bài còn lại = hốc
   const h0=sortCards(fullDeck.slice(0,9));
   const h1=sortCards(fullDeck.slice(9,18));
-  const deck=fullDeck.slice(18); // còn 34 lá
-  const rubbish=[];
-  // Người đi trước
+  const deck=fullDeck.slice(18);
   const fp=firstPlayer!==null&&firstPlayer!==undefined&&firstPlayer>=0?firstPlayer:0;
+  // Firebase requires objects not arrays for nested data — store as indexed objects
   return{
-    hands:[h0,h1],
-    deck, // hốc (mảng)
-    rubbish, // bài rác đã đánh (mảng, lá cuối là trên cùng)
-    laidPhoms:[[],[]], // [[phom0,phom1,...],[phom0,...]] — mỗi phom là mảng cards
+    hands:{0:h0,1:h1},
+    deck:deck,
+    rubbish:[],
+    laidPhoms:{0:[],1:[]},
     turn:fp,
-    phase:'draw', // draw | phom | discard
+    phase:'draw',
     gameOver:false,winner:-1,
-    scores:[0,0],round:round||1,
+    scores:{0:0,1:0},round:round||1,
     turnStartAt:Date.now(),
-    passedCount:0 // số lượt liên tiếp ko bốc rác
+    passedCount:0
   };
 }
 
@@ -1000,6 +998,11 @@ let _winShown=false,_prevTurnSlot=-1;
 
 function enterGame(room){
   detachAll();SFX.resetT();
+  // Always re-detect mySlot from room.players
+  if(room.players){
+    const idx=room.players.indexOf(App.currentUser.username);
+    if(idx>=0)App.mySlot=idx;
+  }
   document.getElementById('gameRoomName').textContent='🃏 '+room.name;
   document.getElementById('gameRound').textContent='Ván '+(room.round||1);
   App.selected=new Set();App.lastGChatCount=0;_winShown=false;_prevTurnSlot=-1;_prevRoomPC=2;
@@ -1020,22 +1023,49 @@ function startGameListener(){
 
 function renderGame(room){
   if(!room||!room.gameState)return;
-  const gs=room.gameState;const my=App.mySlot,op=1-my;
+  const gs=room.gameState;
+  // Fix mySlot if lost (e.g. after rejoin)
+  if(App.mySlot<0&&room.players){
+    const idx=room.players.indexOf(App.currentUser.username);
+    if(idx>=0)App.mySlot=idx;
+  }
+  // Ensure hands are arrays (Firebase can return null for empty arrays)
+  if(!gs.hands)gs.hands=[[],[]];
+  if(!gs.hands[0])gs.hands[0]=[];
+  if(!gs.hands[1])gs.hands[1]=[];
+  if(!gs.laidPhoms)gs.laidPhoms=[[],[]];
+  if(!gs.laidPhoms[0])gs.laidPhoms[0]=[];
+  if(!gs.laidPhoms[1])gs.laidPhoms[1]=[];
+  if(!gs.rubbish)gs.rubbish=[];
+  if(!gs.deck)gs.deck=[];
+  const my=App.mySlot,op=1-my;
+  window._lastRoom=room;
+  // Normalize hands/laidPhoms/scores from Firebase (may come as objects with string keys)
+  function toArr(v){if(!v)return[];if(Array.isArray(v))return v;return Object.keys(v).sort((a,b)=>+a-+b).map(k=>v[k]);}
+  const hand0=toArr(gs.hands&&gs.hands[0]);
+  const hand1=toArr(gs.hands&&gs.hands[1]);
+  const hands=[hand0,hand1];
+  const lp0=toArr(gs.laidPhoms&&gs.laidPhoms[0]);
+  const lp1=toArr(gs.laidPhoms&&gs.laidPhoms[1]);
+  const laidPhoms=[lp0,lp1];
+  const scores=[+(gs.scores&&(gs.scores[0]||gs.scores['0'])||0),+(gs.scores&&(gs.scores[1]||gs.scores['1'])||0)];
+  const rubbish=toArr(gs.rubbish);
+  const deck=toArr(gs.deck);
   document.getElementById('oppNameLabel').textContent=room.playerDisplays[op]||'Đối thủ';
   document.getElementById('myNameLabel').textContent=room.playerDisplays[my]||'Bạn';
   document.getElementById('gameRound').textContent='Ván '+(room.round||1);
 
   // Opponent hand
-  const oppCards=gs.hands[op]||[];
+  const oppCards=hands[op]||[];
   const oppHandEl=document.getElementById('oppHand');
   if(gs.gameOver){
     oppHandEl.innerHTML=oppCards.map((c,i)=>cardHTML(c,i,false)).join('');
     const oppPhomPrev=document.getElementById('oppPhomPreview');
-    const oppPhoms=gs.laidPhoms[op]||[];
+    const oppPhoms=laidPhoms[op]||[];
     if(oppPhoms.length){
       oppPhomPrev.style.display='';
       oppPhomPrev.innerHTML='<div style="color:rgba(255,255,255,.45);font-size:10px;font-weight:700;text-transform:uppercase;margin-bottom:4px;">Phỏm đã hạ</div>'
-        +oppPhoms.map(ph=>`<div class="phom-group">${ph.map(c=>cardHTML(c,-1,false,'inphom')).join('')}</div>`).join('');
+        +oppPhoms.map(ph=>`<div class="phom-group">${toArr(ph).map(c=>cardHTML(c,-1,false,'inphom')).join('')}</div>`).join('');
     }
   } else {
     oppHandEl.innerHTML=oppCards.length?oppCards.map(()=>'<div class="card-back"></div>').join(''):'<span style="color:rgba(255,255,255,.25);font-size:11px;">Hết bài</span>';
@@ -1045,20 +1075,17 @@ function renderGame(room){
 
   // Table phom rows
   const tPhomEl=document.getElementById('tablePhomRows');
-  const allPhoms=[...(gs.laidPhoms[0]||[]),...(gs.laidPhoms[1]||[])];
+  const allPhoms=[...laidPhoms[0],...laidPhoms[1]];
   if(allPhoms.length){
-    tPhomEl.innerHTML=`<div class="phom-row-label">🃏 Phỏm đã hạ</div><div class="phom-row">${allPhoms.map(ph=>`<div class="phom-group">${ph.map(c=>cardHTML(c,-1,false,'inphom')).join('')}</div>`).join('')}</div>`;
+    tPhomEl.innerHTML=`<div class="phom-row-label">🃏 Phỏm đã hạ</div><div class="phom-row">${allPhoms.map(ph=>`<div class="phom-group">${toArr(ph).map(c=>cardHTML(c,-1,false,'inphom')).join('')}</div>`).join('')}</div>`;
   } else {
     tPhomEl.innerHTML='<div style="color:rgba(255,255,255,.25);font-size:11px;text-align:center;padding:4px 0;">Chưa có phỏm nào được hạ</div>';
   }
 
   // Rubbish pile
   const rubEl=document.getElementById('tableRubbish');
-  const rub=gs.rubbish||[];
-  if(rub.length){
-    // chỉ hiện top 5 lá rác
-    const show=rub.slice(-5);
-    rubEl.innerHTML=show.map((c,i)=>cardHTML(c,i,false)).join('');
+  if(rubbish.length){
+    rubEl.innerHTML=rubbish.slice(-5).map((c,i)=>cardHTML(c,i,false)).join('');
   } else {
     rubEl.innerHTML='<span style="color:rgba(255,255,255,.25);font-size:11px;">Chưa có</span>';
   }
@@ -1077,42 +1104,41 @@ function renderGame(room){
   }
 
   // Phase dots
-  const phases=['draw','phom','discard'];
-  phases.forEach((p,i)=>{
+  ['draw','phom','discard'].forEach((p,i)=>{
     const el=document.getElementById(['phDraw','phPhom','phDiscard'][i]);
     if(el)el.className='phase-dot'+(myTurn&&gs.phase===p?' active':'');
   });
 
-  // Scores
-  document.getElementById('scoresDisplay').innerHTML=gs.scores.map((s,i)=>{
+  // Scores display
+  document.getElementById('scoresDisplay').innerHTML=scores.map((s,i)=>{
     const n=i===my?'Bạn':(room.playerDisplays[op]||'Đối thủ');
     return`<span class="score-badge">${n}: ${s} thắng</span>`;
   }).join('');
 
   // Stats
-  renderStats(gs,room.playerDisplays,my);
+  renderStats(scores,room.playerDisplays,my,room.round||1);
 
   // My hand
-  const myCards=gs.hands[my]||[];
+  const myCards=hands[my]||[];
   const interactable=myTurn&&!gs.gameOver;
-  document.getElementById('myHand').innerHTML=myCards.map((c,i)=>cardHTML(c,i,interactable)).join('');
+  document.getElementById('myHand').innerHTML=myCards.length
+    ?myCards.map((c,i)=>cardHTML(c,i,interactable)).join('')
+    :'<span style="color:rgba(255,255,255,.35);font-size:12px;">Bạn chưa có bài</span>';
   document.getElementById('myCount').textContent=myCards.length+' lá';
 
   // My laid phoms preview
-  const myPhoms=gs.laidPhoms[my]||[];
+  const myPhoms=laidPhoms[my]||[];
   const myPhomPrev=document.getElementById('myPhomPreview');
-  const myPhomRow=document.getElementById('myPhomRow');
   if(myPhoms.length){
     myPhomPrev.style.display='';
-    myPhomRow.innerHTML=myPhoms.map(ph=>`<div class="phom-group">${ph.map(c=>cardHTML(c,-1,false,'inphom')).join('')}</div>`).join('');
+    document.getElementById('myPhomRow').innerHTML=myPhoms.map(ph=>`<div class="phom-group">${toArr(ph).map(c=>cardHTML(c,-1,false,'inphom')).join('')}</div>`).join('');
   } else {
     myPhomPrev.style.display='none';
   }
 
   // Controls
-  const deck=gs.deck||[];const rub2=gs.rubbish||[];
   const canDrawDeck=myTurn&&gs.phase==='draw'&&deck.length>0;
-  const canDrawRub=myTurn&&gs.phase==='draw'&&rub2.length>0;
+  const canDrawRub=myTurn&&gs.phase==='draw'&&rubbish.length>0;
   const canPhom=myTurn&&(gs.phase==='phom'||gs.phase==='draw')&&!gs.gameOver;
   const canDiscard=myTurn&&(gs.phase==='discard'||gs.phase==='phom')&&!gs.gameOver;
   document.getElementById('btnDrawDeck').disabled=!canDrawDeck;
@@ -1120,11 +1146,8 @@ function renderGame(room){
   document.getElementById('btnPhom').disabled=!canPhom||App.selected.size<3;
   document.getElementById('btnDiscard').disabled=!canDiscard||App.selected.size!==1;
 
-  // Turn animation
-  if(!gs.gameOver){
-    SFX.checkTurn(gs.turn,my);
-    if(gs.turn!==_prevTurnSlot){_prevTurnSlot=gs.turn;}
-  }
+  // Turn dots
+  if(!gs.gameOver){SFX.checkTurn(gs.turn,my);if(gs.turn!==_prevTurnSlot)_prevTurnSlot=gs.turn;}
   document.getElementById('myTurnDot').className='my-turn-dot'+(myTurn?' active':'');
   document.getElementById('oppTurnDot').className='turn-dot'+(!myTurn&&!gs.gameOver?' active':'');
 
@@ -1147,8 +1170,7 @@ function renderGame(room){
     document.getElementById('winTitle').textContent=isW?'BẠN THẮNG!':'Thua rồi!';
     const oppN=room.playerDisplays[op]||'Đối thủ';
     document.getElementById('winMsg').textContent=isW?'Chúc mừng! Bạn hạ hết phỏm!':oppN+' đã thắng ván này!';
-    // Result table
-    const myPts=calcRubbish(gs.hands[my]);const oppPts=calcRubbish(gs.hands[op]);
+    const myPts=calcRubbish(hands[my]);const oppPts=calcRubbish(hands[op]);
     document.getElementById('resultTable').innerHTML=`<tr><th>Người chơi</th><th>Rác (điểm)</th><th>Kết quả</th></tr>
       <tr class="${isW?'win-row':'lose-row'}"><td>Bạn (${room.playerDisplays[my]||'Bạn'})</td><td>${myPts}</td><td>${isW?'🏆 Thắng':'😔 Thua'}</td></tr>
       <tr class="${!isW?'win-row':'lose-row'}"><td>${oppN}</td><td>${oppPts}</td><td>${!isW?'🏆 Thắng':'😔 Thua'}</td></tr>`;
