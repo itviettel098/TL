@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -157,7 +158,6 @@ body{font-family:'Noto Sans',sans-serif;background:var(--green-dark);min-height:
 .btn-leave{background:rgba(231,76,60,0.2);color:#e74c3c;border:1px solid rgba(231,76,60,0.3);border-radius:7px;padding:5px 12px;font-size:12px;cursor:pointer;font-weight:600;transition:all .2s;}
 .btn-leave:hover{background:rgba(231,76,60,0.35);}
 .room-body{flex:1;padding:16px;max-width:520px;margin:0 auto;width:100%;display:flex;flex-direction:column;gap:12px;}
-/* Slots grid — tối đa 4 người */
 .players-area{background:rgba(0,0,0,0.3);border-radius:14px;padding:16px;display:grid;gap:10px;}
 .players-area.p2{grid-template-columns:1fr auto 1fr;}
 .players-area.p3{grid-template-columns:1fr 1fr 1fr;}
@@ -196,7 +196,7 @@ body{font-family:'Noto Sans',sans-serif;background:var(--green-dark);min-height:
 .btn-game-leave{background:rgba(231,76,60,0.15);color:#e74c3c;border:1px solid rgba(231,76,60,0.25);border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;font-weight:600;}
 .game-body{flex:1;display:flex;flex-direction:column;padding:8px;gap:6px;overflow-y:auto;max-width:520px;margin:0 auto;width:100%;}
 
-/* PLAYER STRIPS (opponents) */
+/* PLAYER STRIPS */
 .opp-strip{background:rgba(0,0,0,0.25);border-radius:10px;padding:7px 10px;display:flex;align-items:center;gap:8px;}
 .opp-strip.active-turn{border:1.5px solid var(--gold);}
 .opp-strip-info{display:flex;align-items:center;gap:6px;min-width:0;flex:1;}
@@ -207,7 +207,6 @@ body{font-family:'Noto Sans',sans-serif;background:var(--green-dark);min-height:
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
 .opp-hand-row{display:flex;align-items:center;flex-wrap:wrap;gap:2px;flex:1;justify-content:flex-end;}
 .cback-sm{width:28px;height:42px;border-radius:5px;border:1px solid #555;background:repeating-linear-gradient(45deg,#1a3a8c,#1a3a8c 4px,#2555cc 4px,#2555cc 8px);display:inline-block;flex-shrink:0;box-shadow:1px 1px 3px rgba(0,0,0,0.4);}
-/* overlap backs for large hands */
 .opp-hand-row .cback-sm{margin-left:-12px;}
 .opp-hand-row .cback-sm:first-child{margin-left:0;}
 .opp-hand-row .card{margin-left:-10px;}
@@ -245,7 +244,6 @@ body{font-family:'Noto Sans',sans-serif;background:var(--green-dark);min-height:
 .btn-play{background:#16a34a;color:#fff;}
 .btn-pass{background:#dc2626;color:#fff;}
 .btn-sort{background:#2563eb;color:#fff;}
-.btn-hint{background:#d97706;color:#fff;}
 
 /* STATS */
 .stats-panel{background:rgba(0,0,0,0.3);border-radius:12px;overflow:hidden;margin-top:2px;}
@@ -283,6 +281,9 @@ body{font-family:'Noto Sans',sans-serif;background:var(--green-dark);min-height:
 .ping-good{color:#2ecc71;}.ping-ok{color:#f5c842;}.ping-bad{color:#e74c3c;}
 @keyframes timerPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.15);}}
 
+/* HINT LABEL */
+.hint-label{display:inline-block;margin-left:8px;font-size:11px;font-weight:700;color:rgba(245,200,66,0.8);background:rgba(245,200,66,0.12);border:1px solid rgba(245,200,66,0.25);border-radius:10px;padding:2px 8px;vertical-align:middle;}
+
 /* GAME CHAT */
 .game-chat{background:rgba(0,0,0,0.3);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;margin-top:4px;}
 .game-chat-messages{height:80px;overflow-y:auto;padding:6px 10px;display:flex;flex-direction:column;gap:3px;}
@@ -296,7 +297,7 @@ body{font-family:'Noto Sans',sans-serif;background:var(--green-dark);min-height:
 .btn-emoji{background:none;border:none;font-size:16px;cursor:pointer;padding:2px 4px;border-radius:6px;transition:background .15s;}
 .btn-emoji:hover{background:rgba(255,255,255,0.15);}
 
-/* FINISH ORDER DISPLAY */
+/* FINISH ORDER */
 .finish-order{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;}
 .finish-item{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:8px;background:rgba(0,0,0,0.1);}
 .finish-rank{font-size:20px;width:30px;text-align:center;}
@@ -475,7 +476,6 @@ body{font-family:'Noto Sans',sans-serif;background:var(--green-dark);min-height:
     <button class="btn-game-leave" onclick="doLeaveGame()">Rời Game</button>
   </div>
   <div class="game-body">
-    <!-- Opponents area (filled dynamically) -->
     <div id="oppsArea"></div>
 
     <div class="table-area">
@@ -491,6 +491,7 @@ body{font-family:'Noto Sans',sans-serif;background:var(--green-dark);min-height:
           <span class="my-turn-dot" id="myTurnDot"></span>
           <span id="myNameLabel">Bạn</span>
           <span class="turn-timer hidden" id="myTimer"></span>
+          <span class="hint-label" id="hintLabel" style="display:none;">💡 Gợi ý</span>
           <span class="ping-badge" id="myPing" style="display:none"></span>
         </div>
         <div class="my-count" id="myCount">-- lá</div>
@@ -499,7 +500,6 @@ body{font-family:'Noto Sans',sans-serif;background:var(--green-dark);min-height:
       <div class="controls">
         <button class="btn-ctrl btn-sort" onclick="sortHand()">Sắp xếp</button>
         <button class="btn-ctrl btn-play" id="btnPlay" onclick="doPlay()">Đánh bài</button>
-        <button class="btn-ctrl btn-hint" onclick="doHint()">Gợi ý</button>
         <button class="btn-ctrl btn-pass" id="btnPass" onclick="doPass()">Bỏ lượt</button>
       </div>
     </div>
@@ -593,6 +593,7 @@ return{
   roomInvite(){tone(523,'sine',0.28,0.85);tone(659,'sine',0.22,0.8,0.12);tone(784,'sine',0.18,0.75,0.24);vib([30,15,30,15,50]);},
   sort(){[300,380,460,540].forEach((f,i)=>tone(f,'sine',0.09,0.6,i*0.04));vib(15);},
   click(){tone(660,'sine',0.05,0.5);},
+  hintApplied(){tone(880,'sine',0.12,0.7);tone(1047,'sine',0.1,0.65,0.08);vib([10,5,15]);},
   oppDisconnect(name){tone(220,'sine',0.8,0.9);tone(185,'sine',0.7,0.85,0.25);vib([50,30,50]);if(name)speakVi(name+' mất kết nối!',400);},
   oppReconnect(name){tone(440,'sine',0.3,0.8);tone(880,'sine',0.35,0.85,0.2);vib([20,10,40]);if(name)speakVi(name+' đã kết nối lại!',200);},
   startTurnReminder(){SFX.stopTurnReminder();SFX.yourTurn();turnBellTimeout=setTimeout(()=>{turnBellInterval=setInterval(()=>SFX.urgentBell(),5000);},8000);},
@@ -639,7 +640,8 @@ const App={
   currentUser:null,currentRoom:null,mySlot:-1,selected:new Set(),
   currentFpTab:0,listeners:{},pendingInvite:null,
   lastChatCount:0,lastGameChatCount:0,lastGiftTs:0,
-  _cachedRoom:null
+  _cachedRoom:null,
+  _lastAutoHintTurn:-1  // track which turn we last auto-hinted
 };
 
 // ── AUTH ──
@@ -687,7 +689,7 @@ window.doLogout=async function(){
 function showScreen(id){document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('active');s.style.display='none';});const el=document.getElementById(id);el.style.display='flex';el.classList.add('active');}
 
 async function showLobby(){
-  detachAllListeners();SFX.resetLastTurn();App._cachedRoom=null;
+  detachAllListeners();SFX.resetLastTurn();App._cachedRoom=null;App._lastAutoHintTurn=-1;
   document.getElementById('topAvatar').textContent=App.currentUser.display.charAt(0).toUpperCase();
   document.getElementById('topUsername').textContent=App.currentUser.display;
   const userData=await dbGet('users/'+App.currentUser.username);
@@ -756,7 +758,6 @@ function renderRoom(room){
   if(!room)return;
   const max=room.maxPlayers||2;
   const pa=document.getElementById('playersArea');
-  // Grid class
   pa.className='players-area'+(max<=2?' p2':max===3?' p3':' p4');
   pa.innerHTML='';
   for(let i=0;i<max;i++){
@@ -810,15 +811,11 @@ function cardValue(c){return RANK_ORDER.indexOf(c.r)*4+SUIT_ORDER.indexOf(c.s);}
 function sortCards(cards){return cards.slice().sort((a,b)=>cardValue(a)-cardValue(b));}
 window.sortCards=sortCards;
 
-// Chia bài theo số người: 4→13, 3→17, 2→13
 function dealCards(n,maxPlayers){
   const deck=makeDeck();
-  // Nếu admin tham gia và cheat mode bật
   if(adminSeeCards||cheatDeckMode!=='normal'){
     const adminSlot=n.indexOf(ADMIN_USER);
-    if(adminSlot>=0&&cheatDeckMode!=='normal'){
-      return dealCheat(n,maxPlayers,adminSlot);
-    }
+    if(adminSlot>=0&&cheatDeckMode!=='normal'){return dealCheat(n,maxPlayers,adminSlot);}
   }
   const shuffled=shuffle(deck);
   let cardsPerPlayer;
@@ -873,48 +870,127 @@ function canBeat(combo,lastPlay){
   return combo.val>lc.val;
 }
 
-// ── createGameState cho N người ──
-function createGameState(players,displays,maxPlayers,round,lastWinner){
-  const hands=dealCards(players,maxPlayers);
+// ── AUTO HINT LOGIC ──
+// Tìm combo tốt nhất có thể đánh được (ưu tiên thắng, chọn bài nhỏ nhất)
+function computeHint(hand, lastPlay) {
+  if (!hand || !hand.length) return { idxs: [], msg: 'Hết bài!' };
 
-  // Xác định ai đi trước
-  let fp=0,reason='';
-  const vipSlot=players.findIndex(u=>u===VIP_FIRST_USER);
-  if(vipSlot>=0&&players[vipSlot]){
-    fp=vipSlot;reason='👑 quyền ưu tiên → đi trước!';
-  } else if(lastWinner!==null&&lastWinner!==undefined&&lastWinner>=0){
-    fp=lastWinner;reason='🏆 thắng ván trước → đi trước!';
-  } else {
-    // Tìm 3 Bích
-    outer:for(let p=0;p<maxPlayers;p++){
-      for(const c of hands[p]){if(c.r==='3'&&c.s==='s'){fp=p;break outer;}}
-    }
-    reason='🃏 có 3 Bích → đi trước!';
+  // Nếu bàn trống → đề xuất lá nhỏ nhất
+  if (!lastPlay || !lastPlay.length) {
+    return { idxs: [0], msg: '💡 Đi trước: lá nhỏ nhất' };
   }
 
-  return{
-    hands,lastPlay:[],lastPlayer:-1,
-    passCount:0,     // số người bỏ lượt liên tiếp (để phát hiện vòng bỏ)
-    passedPlayers:[], // danh sách các slot đã bỏ trong vòng hiện tại
-    activePlayers:Array.from({length:maxPlayers},(_,i)=>i), // còn lá
-    finishOrder:[],  // thứ tự kết thúc [slot,...]
-    turn:fp,maxPlayers,
-    gameOver:false,winner:-1,scores:Array(maxPlayers).fill(0),
-    round:round||1,turnStartAt:Date.now(),
-    log:[{type:'first',player:displays[fp]||('P'+(fp+1)),reason,round:round||1}],
-  };
+  const lc = getCombo(lastPlay);
+  if (!lc) return { idxs: [], msg: 'Bỏ lượt!' };
+
+  const candidates = [];
+
+  // Tứ quý (bomb4) — luôn thắng được trừ khi gặp tứ quý mạnh hơn
+  const rmap = {};
+  hand.forEach((c, i) => { if (!rmap[c.r]) rmap[c.r] = []; rmap[c.r].push(i); });
+  Object.values(rmap).forEach(idxs => {
+    if (idxs.length >= 4) candidates.push(idxs.slice(0, 4));
+  });
+
+  if (lc.type === 'single') {
+    hand.forEach((_, i) => candidates.push([i]));
+  } else if (lc.type === 'pair') {
+    for (let i = 0; i < hand.length - 1; i++)
+      for (let j = i + 1; j < hand.length; j++)
+        if (hand[i].r === hand[j].r) candidates.push([i, j]);
+  } else if (lc.type === 'triple') {
+    for (let i = 0; i < hand.length - 2; i++)
+      for (let j = i + 1; j < hand.length; j++)
+        for (let k = j + 1; k < hand.length; k++)
+          if (hand[i].r === hand[j].r && hand[j].r === hand[k].r) candidates.push([i, j, k]);
+  } else if (lc.type === 'seq') {
+    const len = lc.len;
+    const byRank = {};
+    hand.forEach((c, i) => { if (c.r !== '2') { if (!byRank[c.r]) byRank[c.r] = []; byRank[c.r].push(i); } });
+    const avail = RANK_ORDER.filter(r => r !== '2');
+    for (let s = 0; s <= avail.length - len; s++) {
+      const slice = avail.slice(s, s + len);
+      if (slice.every(r => byRank[r])) candidates.push(slice.map(r => byRank[r][0]));
+    }
+  } else if (lc.type === 'dseq') {
+    const numPairs = lc.pairs;
+    const pairsByRank = {};
+    for (const [r, idxs] of Object.entries(rmap)) {
+      if (idxs.length >= 2) pairsByRank[r] = idxs.slice(0, 2);
+    }
+    const avail = RANK_ORDER.filter(r => r !== '2' && pairsByRank[r]);
+    for (let s = 0; s <= avail.length - numPairs; s++) {
+      const slice = avail.slice(s, s + numPairs);
+      const ri = slice.map(r => RANK_ORDER.indexOf(r));
+      let consec = true;
+      for (let i = 1; i < ri.length; i++) if (ri[i] - ri[i-1] !== 1) { consec = false; break; }
+      if (consec) candidates.push(slice.flatMap(r => pairsByRank[r]));
+    }
+  } else if (lc.type === 'multipair') {
+    const numPairs = lc.pairs;
+    const pairsByRank = {};
+    for (const [r, idxs] of Object.entries(rmap)) {
+      if (idxs.length >= 2) pairsByRank[r] = idxs.slice(0, 2);
+    }
+    const pairRanks = Object.keys(pairsByRank);
+    for (let i = 0; i <= pairRanks.length - numPairs; i++) {
+      const slice = pairRanks.slice(i, i + numPairs);
+      candidates.push(slice.flatMap(r => pairsByRank[r]));
+    }
+  }
+
+  const valid = candidates
+    .map(idxs => ({ idxs, cards: idxs.map(i => hand[i]) }))
+    .filter(({ cards }) => { const c = getCombo(cards); return c && canBeat(c, lastPlay); })
+    .sort((a, b) => getCombo(a.cards).val - getCombo(b.cards).val);
+
+  if (!valid.length) return { idxs: [], msg: '🚫 Không có bài thích hợp — bỏ lượt!' };
+  return { idxs: valid[0].idxs, msg: '💡 Gợi ý: ' + valid.length + ' nước đánh được' };
 }
 
-// ── Tính lượt tiếp theo theo vòng, bỏ qua người hết bài ──
+// Áp dụng auto hint khi đến lượt (chỉ 1 lần mỗi lượt)
+function applyAutoHint(gs, my) {
+  // Tạo key duy nhất cho lượt này: turnStartAt đảm bảo mỗi lượt mới là 1 key mới
+  const turnKey = gs.turnStartAt || gs.turn;
+  if (App._lastAutoHintTurn === turnKey) return; // đã gợi ý lượt này rồi
+  App._lastAutoHintTurn = turnKey;
+
+  const hand = gs.hands[my] || [];
+  const { idxs, msg } = computeHint(hand, gs.lastPlay || []);
+  App.selected = new Set(idxs);
+
+  // Update UI
+  const hintLabelEl = document.getElementById('hintLabel');
+  if (hintLabelEl) {
+    if (idxs.length > 0) {
+      hintLabelEl.textContent = '💡 Gợi ý';
+      hintLabelEl.style.display = '';
+    } else {
+      hintLabelEl.textContent = '🚫 Bỏ lượt';
+      hintLabelEl.style.display = '';
+    }
+  }
+
+  setGameStatus(msg);
+  if (idxs.length > 0) SFX.hintApplied();
+}
+
+function createGameState(players,displays,maxPlayers,round,lastWinner){
+  const hands=dealCards(players,maxPlayers);
+  let fp=0,reason='';
+  const vipSlot=players.findIndex(u=>u===VIP_FIRST_USER);
+  if(vipSlot>=0&&players[vipSlot]){fp=vipSlot;reason='👑 quyền ưu tiên → đi trước!';}
+  else if(lastWinner!==null&&lastWinner!==undefined&&lastWinner>=0){fp=lastWinner;reason='🏆 thắng ván trước → đi trước!';}
+  else{outer:for(let p=0;p<maxPlayers;p++){for(const c of hands[p]){if(c.r==='3'&&c.s==='s'){fp=p;break outer;}}}reason='🃏 có 3 Bích → đi trước!';}
+  return{hands,lastPlay:[],lastPlayer:-1,passCount:0,passedPlayers:[],activePlayers:Array.from({length:maxPlayers},(_,i)=>i),finishOrder:[],turn:fp,maxPlayers,gameOver:false,winner:-1,scores:Array(maxPlayers).fill(0),round:round||1,turnStartAt:Date.now(),log:[{type:'first',player:displays[fp]||('P'+(fp+1)),reason,round:round||1}]};
+}
+
 function nextTurn(current,maxPlayers,activePlayers){
   let next=(current+1)%maxPlayers;for(let i=0;i<maxPlayers;i++){if(activePlayers.includes(next))return next;next=(next+1)%maxPlayers;}
   return current;
 }
 
-// ── Kiểm tra xem tất cả người còn lại có bỏ lượt không (người đánh cuối được tự do đi) ──
 function checkAllPassed(gs){
-  // passedPlayers là những người đã bỏ kể từ lần đánh cuối
-  // Trừ người vừa đánh (lastPlayer), nếu tất cả người khác còn trong activePlayers đã bỏ → clear
   const others=gs.activePlayers.filter(s=>s!==gs.lastPlayer);
   return others.every(s=>gs.passedPlayers.includes(s));
 }
@@ -931,7 +1007,7 @@ function enterGame(room){
   detachAllListeners();SFX.resetLastTurn();initAdminUI();
   document.getElementById('gameRoomName').textContent='🃏 '+room.name;
   document.getElementById('gameRound').textContent='Ván '+(room.round||1);
-  App.selected=new Set();App.lastGameChatCount=0;App.lastGiftTs=0;
+  App.selected=new Set();App.lastGameChatCount=0;App.lastGiftTs=0;App._lastAutoHintTurn=-1;
   _lastLogLen=0;_winShown=false;_prevTurnSlot=-1;
   showScreen('gameScreen');
   document.getElementById('winOverlay').className='game-overlay';
@@ -956,9 +1032,23 @@ function renderGame(room){
   document.getElementById('myNameLabel').textContent=room.playerDisplays[my]||'Bạn';
   document.getElementById('gameRound').textContent='Ván '+(room.round||1);
   const myTurn=gs.turn===my;
+  const myFinished=gs.finishOrder&&gs.finishOrder.includes(my);
   if(!gs.gameOver)SFX.checkTurnChange(gs.turn,my);
 
-  // ── Render opponents (all except mySlot) ──
+  // ── AUTO HINT khi đến lượt (reset selection khi không phải lượt mình) ──
+  if(myTurn && !gs.gameOver && !myFinished){
+    applyAutoHint(gs, my);
+  } else {
+    // Không phải lượt mình → xóa selection cũ, ẩn hint label
+    // Chỉ xóa nếu vừa chuyển lượt (để không giật khi re-render)
+    if(gs.turn !== my){
+      App.selected = new Set();
+      const hintLabelEl = document.getElementById('hintLabel');
+      if(hintLabelEl) hintLabelEl.style.display = 'none';
+    }
+  }
+
+  // ── Render opponents ──
   const oppsArea=document.getElementById('oppsArea');
   oppsArea.innerHTML='';
   for(let s=0;s<max;s++){
@@ -973,37 +1063,32 @@ function renderGame(room){
     oppsArea.appendChild(strip);
   }
 
-  // ── Render table ──
+  // ── Table ──
   const lp=gs.lastPlay||[];
   if(lp.length)document.getElementById('tablePlayed').innerHTML=lp.map(c=>cardHTML(c,-1,false)).join('');
   else document.getElementById('tablePlayed').innerHTML='<span style="color:rgba(255,255,255,.3);font-size:12px;">Chưa có bài</span>';
-
   if(gs.lastPlayer>=0){const lpn=gs.lastPlayer===my?'Bạn':(room.playerDisplays[gs.lastPlayer]||'P'+(gs.lastPlayer+1));document.getElementById('lastPlayerLabel').textContent=lpn+' vừa đánh';}
   else document.getElementById('lastPlayerLabel').textContent='';
-
-  // Scores
   document.getElementById('scoresDisplay').innerHTML=(gs.scores||[]).map((s,i)=>{const n=i===my?'Bạn':(room.playerDisplays[i]||'P'+(i+1));return`<span class="score-badge">${n}: ${s}W</span>`;}).join('');
 
   // ── My hand ──
   const myCards=gs.hands[my]||[];
-  const myFinished=gs.finishOrder&&gs.finishOrder.includes(my);
   document.getElementById('myHand').innerHTML=myCards.length?myCards.map((c,i)=>cardHTML(c,i,myTurn&&!gs.gameOver&&!myFinished)).join(''):'<span style="color:var(--gold);font-size:12px;font-weight:700;">✓ Hết bài!</span>';
   document.getElementById('myCount').textContent=myCards.length+' lá';
   document.getElementById('myTurnDot').className='my-turn-dot'+(myTurn&&!gs.gameOver&&!myFinished?' active':'');
 
-  // Status
+  // Status (chỉ ghi đè nếu không phải lượt mình — lượt mình đã do autoHint set)
   const statusEl=document.getElementById('gameStatus');
   if(gs.gameOver){statusEl.textContent='Ván kết thúc!';}
   else if(myFinished){statusEl.textContent='Bạn đã hết bài!';}
-  else if(myTurn)statusEl.textContent='👆 Lượt của bạn!';
-  else statusEl.textContent='⏳ '+(room.playerDisplays[gs.turn]||'P'+(gs.turn+1))+' đang suy nghĩ...';
+  else if(!myTurn){statusEl.textContent='⏳ '+(room.playerDisplays[gs.turn]||'P'+(gs.turn+1))+' đang suy nghĩ...';}
 
   // Controls
   const canPlay=myTurn&&!gs.gameOver&&!myFinished;
   document.getElementById('btnPlay').disabled=!canPlay;
   document.getElementById('btnPass').disabled=!canPlay||!lp.length||gs.passedPlayers&&gs.passedPlayers.includes(my);
 
-  // Log changes for SFX
+  // Log SFX
   const logArr=gs.log?(Array.isArray(gs.log)?gs.log:Object.values(gs.log)):[];
   if(logArr.length!==_lastLogLen){
     if(logArr.length>_lastLogLen&&_lastLogLen>0&&gs.lastPlayer!==my){const combo=getCombo(gs.lastPlay||[]);if(combo&&combo.type==='bomb4')SFX.bomb();else if(gs.lastPlay&&gs.lastPlay.length)SFX.opponentPlay();}
@@ -1031,10 +1116,8 @@ function renderGame(room){
     document.getElementById('winIcon').textContent=isFirst?'🏆':'🎴';
     document.getElementById('winTitle').textContent=isFirst?'🏆 BẠN THẮNG!':'Kết Thúc Ván!';
     document.getElementById('winMsg').textContent=isFirst?'Xuất sắc! Bạn hoàn thành trước tiên!':'Chúc mừng những người chiến thắng!';
-    // Finish order
     const foEl=document.getElementById('finishOrder');
     foEl.innerHTML=fo.map((slot,rank)=>{const name=slot===my?'Bạn 🫵':(room.playerDisplays[slot]||'P'+(slot+1));return`<div class="finish-item"><div class="finish-rank">${medals[rank]||'🏅'}</div><div class="finish-name">${escHtml(name)}</div></div>`;}).join('');
-    // Cards remaining for non-finished
     const revSection=document.getElementById('oppReviewSection');const revBody=document.getElementById('oppReviewCardsInOverlay');
     const remaining=[];
     for(let s=0;s<max;s++){if(!fo.includes(s)&&gs.hands[s]&&gs.hands[s].length){remaining.push({slot:s,name:room.playerDisplays[s]||'P'+(s+1),cards:gs.hands[s]});}}
@@ -1064,22 +1147,14 @@ window.doPlay=async function(){
   newGs.hands[App.mySlot]=newGs.hands[App.mySlot].filter((_,i)=>!sel.includes(i));
   newGs.lastPlay=cards;newGs.lastPlayer=App.mySlot;newGs.passedPlayers=[];
   const logArr=Array.isArray(newGs.log)?newGs.log:Object.values(newGs.log||{});newGs.log=logArr;
-
   if(newGs.hands[App.mySlot].length===0){
-    // Người này hết bài
     if(!newGs.finishOrder)newGs.finishOrder=[];
     newGs.finishOrder.push(App.mySlot);
     newGs.activePlayers=newGs.activePlayers.filter(s=>s!==App.mySlot);
     logArr.push({type:'finish',player:room.playerDisplays[App.mySlot]||'P'+(App.mySlot+1),rank:newGs.finishOrder.length,round:newGs.round});
-    // Cập nhật điểm thắng cho người về nhất
     if(newGs.finishOrder.length===1)newGs.scores[App.mySlot]=(newGs.scores[App.mySlot]||0)+1;
-    // Kiểm tra game over: chỉ còn 1 người có bài
-    if(newGs.activePlayers.length<=1){
-      if(newGs.activePlayers.length===1)newGs.finishOrder.push(newGs.activePlayers[0]);
-      newGs.gameOver=true;newGs.winner=newGs.finishOrder[0];
-    } else {
-      newGs.turn=nextTurn(App.mySlot,max,newGs.activePlayers);newGs.turnStartAt=Date.now();
-    }
+    if(newGs.activePlayers.length<=1){if(newGs.activePlayers.length===1)newGs.finishOrder.push(newGs.activePlayers[0]);newGs.gameOver=true;newGs.winner=newGs.finishOrder[0];}
+    else{newGs.turn=nextTurn(App.mySlot,max,newGs.activePlayers);newGs.turnStartAt=Date.now();}
   } else {
     newGs.turn=nextTurn(App.mySlot,max,newGs.activePlayers);newGs.turnStartAt=Date.now();
   }
@@ -1098,13 +1173,8 @@ window.doPass=async function(){
   if(!newGs.passedPlayers)newGs.passedPlayers=[];
   newGs.passedPlayers.push(App.mySlot);
   const logArr=Array.isArray(newGs.log)?newGs.log:Object.values(newGs.log||{});newGs.log=logArr;
-  // Kiểm tra tất cả đã bỏ → người đánh cuối được tự do
-  if(checkAllPassed(newGs)){
-    newGs.lastPlay=[];newGs.passedPlayers=[];
-    newGs.turn=newGs.lastPlayer>=0?newGs.lastPlayer:nextTurn(App.mySlot,max,newGs.activePlayers);
-  } else {
-    newGs.turn=nextTurn(App.mySlot,max,newGs.activePlayers);
-  }
+  if(checkAllPassed(newGs)){newGs.lastPlay=[];newGs.passedPlayers=[];newGs.turn=newGs.lastPlayer>=0?newGs.lastPlayer:nextTurn(App.mySlot,max,newGs.activePlayers);}
+  else{newGs.turn=nextTurn(App.mySlot,max,newGs.activePlayers);}
   newGs.turnStartAt=Date.now();
   App.selected=new Set();await dbUpdate('rooms/'+App.currentRoom,{gameState:newGs});
 };
@@ -1113,11 +1183,9 @@ window.doForcePass=async function(){
   const room=App._cachedRoom||await dbGet('rooms/'+App.currentRoom);if(!room||!room.gameState)return;
   const gs=room.gameState;if(gs.turn!==App.mySlot||gs.gameOver)return;
   const elapsed=Math.floor((Date.now()-(gs.turnStartAt||Date.now()))/1000);if(elapsed<TURN_LIMIT-1)return;
-  // Nếu không có bài trên bàn → đánh lá nhỏ nhất tự động
   const newGs=JSON.parse(JSON.stringify(gs));const max=newGs.maxPlayers||room.maxPlayers||2;
   const logArr=Array.isArray(newGs.log)?newGs.log:Object.values(newGs.log||{});
   if(!gs.lastPlay||!gs.lastPlay.length){
-    // Đánh lá đầu tiên
     const card=newGs.hands[App.mySlot][0];newGs.lastPlay=[card];newGs.hands[App.mySlot].shift();newGs.lastPlayer=App.mySlot;newGs.passedPlayers=[];
     if(newGs.hands[App.mySlot].length===0){if(!newGs.finishOrder)newGs.finishOrder=[];newGs.finishOrder.push(App.mySlot);newGs.activePlayers=newGs.activePlayers.filter(s=>s!==App.mySlot);if(newGs.finishOrder.length===1)newGs.scores[App.mySlot]=(newGs.scores[App.mySlot]||0)+1;if(newGs.activePlayers.length<=1){if(newGs.activePlayers.length===1)newGs.finishOrder.push(newGs.activePlayers[0]);newGs.gameOver=true;newGs.winner=newGs.finishOrder[0];}else{newGs.turn=nextTurn(App.mySlot,max,newGs.activePlayers);newGs.turnStartAt=Date.now();}}else{newGs.turn=nextTurn(App.mySlot,max,newGs.activePlayers);newGs.turnStartAt=Date.now();}
   } else {
@@ -1133,33 +1201,9 @@ window.doForcePass=async function(){
 window.sortHand=async function(){
   SFX.sort();const room=App._cachedRoom||await dbGet('rooms/'+App.currentRoom);if(!room||!room.gameState)return;
   const newGs=JSON.parse(JSON.stringify(room.gameState));newGs.hands[App.mySlot]=sortCards(newGs.hands[App.mySlot]);
+  // Reset auto hint key so hint re-applies after sort
+  App._lastAutoHintTurn=-1;
   App.selected=new Set();await dbUpdate('rooms/'+App.currentRoom,{gameState:newGs});
-};
-
-window.doHint=async function(){
-  SFX.click();const room=App._cachedRoom||await dbGet('rooms/'+App.currentRoom);if(!room||!room.gameState)return;
-  const gs=room.gameState;if(gs.turn!==App.mySlot)return;
-  const hand=gs.hands[App.mySlot];const lastPlay=gs.lastPlay||[];
-  let hint=[],hintMsg='';
-  if(!lastPlay.length){hint=[0];hintMsg='Gợi ý: đánh lá nhỏ nhất.';}
-  else{
-    const lc=getCombo(lastPlay);
-    if(!lc){hint=[];hintMsg='Không đọc được bài bàn.';}
-    else{
-      // Simple: tìm combo cùng type thắng được
-      const candidates=[];
-      if(lc.type==='single'){hand.forEach((_,i)=>candidates.push([i]));}
-      else if(lc.type==='pair'){for(let i=0;i<hand.length-1;i++)for(let j=i+1;j<hand.length;j++)if(hand[i].r===hand[j].r)candidates.push([i,j]);}
-      else if(lc.type==='triple'){for(let i=0;i<hand.length-2;i++)for(let j=i+1;j<hand.length;j++)for(let k=j+1;k<hand.length;k++)if(hand[i].r===hand[j].r&&hand[j].r===hand[k].r)candidates.push([i,j,k]);}
-      else if(lc.type==='bomb4'){const rmap={};hand.forEach((c,i)=>{if(!rmap[c.r])rmap[c.r]=[];rmap[c.r].push(i);});Object.values(rmap).forEach(idxs=>{if(idxs.length>=4)candidates.push(idxs.slice(0,4));});}
-      else if(lc.type==='seq'){const len=lc.len;const byRank={};hand.forEach((c,i)=>{if(c.r!=='2'){if(!byRank[c.r])byRank[c.r]=[];byRank[c.r].push(i);}});const avail=RANK_ORDER.filter(r=>r!=='2');for(let s=0;s<=avail.length-len;s++){const slice=avail.slice(s,s+len);if(slice.every(r=>byRank[r]))candidates.push(slice.map(r=>byRank[r][0]));}}
-      const valid=candidates.map(idxs=>({idxs,cards:idxs.map(i=>hand[i])})).filter(({cards})=>{const c=getCombo(cards);return c&&canBeat(c,lastPlay);}).sort((a,b)=>getCombo(a.cards).val-getCombo(b.cards).val);
-      if(!valid.length){hint=[];hintMsg='Không có bài để chặn — bỏ lượt!';}
-      else{hint=valid[0].idxs;hintMsg='Gợi ý: đánh được!'+(valid.length>1?' ('+valid.length+' lựa chọn)':'');}
-    }
-  }
-  App.selected=new Set(hint);setGameStatus(hintMsg);vib(hint.length?[20,10,20]:30);
-  document.getElementById('myHand').querySelectorAll('.card').forEach((el,idx)=>{el.className=el.className.replace(' sel','')+(App.selected.has(idx)?' sel':'');el.style.transform=App.selected.has(idx)?'translateY(-16px)':'';});
 };
 
 function setGameStatus(msg){document.getElementById('gameStatus').textContent=msg;}
@@ -1175,6 +1219,7 @@ window.doNewRound=async function(){
   const oldLog=(prevGs&&prevGs.log)?(Array.isArray(prevGs.log)?prevGs.log:Object.values(prevGs.log)):[];
   newGs.log=[...oldLog,...(newGs.log||[])];
   SFX.resetLastTurn();
+  App._lastAutoHintTurn=-1;
   await dbUpdate('rooms/'+App.currentRoom,{gameState:newGs,status:'playing',round:newRound});
   App.selected=new Set();App._cachedRoom=null;
   setTimeout(()=>{for(let i=0;i<6;i++)setTimeout(()=>SFX.cardFlip(),i*60);},200);
@@ -1207,7 +1252,6 @@ function startTurnTimer(isMyTurn,turnStartAt,currentTurnSlot,max,gs){
   function tick(){
     const elapsed=Math.floor((Date.now()-(turnStartAt||Date.now()))/1000);const left=Math.max(0,TURN_LIMIT-elapsed);const urgent=left<=8;
     if(myEl){if(isMyTurn){myEl.textContent=left;myEl.className='turn-timer'+(urgent?' urgent':'');}else{myEl.textContent='';myEl.className='turn-timer hidden';}}
-    // Update opp timers
     if(max&&gs){for(let s=0;s<max;s++){if(s===App.mySlot)continue;const oppEl=document.getElementById('oppTimer_'+s);if(oppEl){if(currentTurnSlot===s){oppEl.textContent=left;oppEl.className='turn-timer'+(urgent?' urgent':'');}else{oppEl.textContent='';oppEl.className='turn-timer hidden';}}}}
     if(isMyTurn&&urgent&&left>0&&left!==_lastTickSecond){_lastTickSecond=left;if(left<=5)SFX.tick();}
     if(isMyTurn&&left<=0&&!_forcePassFired){_forcePassFired=true;doForcePass();return;}
@@ -1277,7 +1321,6 @@ function startPingSystem(){
     if(!App.currentRoom||!App.currentUser)return;const t0=Date.now();
     try{await dbUpdate('rooms/'+App.currentRoom,{[`pings/${App.currentUser.username}`]:{ts:Date.now(),slot:App.mySlot,display:App.currentUser.display}});const rtt=Date.now()-t0;renderPingBadge('myPing',rtt);if(_isReconnecting){_isReconnecting=false;showTurnToast('✅ Bạn đã kết nối lại!');}}
     catch(e){renderPingBadge('myPing',-1);if(!_isReconnecting)tryReconnect();}
-    // Check opps disconnect
     const room=App._cachedRoom;if(!room)return;const max=room.maxPlayers||2;
     for(let s=0;s<max;s++){if(s===App.mySlot)continue;const uname=room.players&&room.players[s];if(!uname)continue;const lastTs=_oppLastPingTs[s]||0;const age=Date.now()-lastTs;if(lastTs>0&&age>8000&&!_oppWasDisconnected[s]){_oppWasDisconnected[s]=true;SFX.oppDisconnect(room.playerDisplays[s]);showDisconnectToast('📶 '+(room.playerDisplays[s]||'P'+(s+1))+' đang mất kết nối...','disconnected',0);}}
   },3000);
