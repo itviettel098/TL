@@ -616,7 +616,7 @@
     updatePreviewIfOpen();
   });
 
-
+  function seekTo(t){
     return new Promise((resolve) => {
       function onSeeked(){
         video.removeEventListener('seeked', onSeeked);
