@@ -693,6 +693,18 @@
     });
   }
 
+  const VN_LETTERS = "a-zA-ZàáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđÀÁẢÃẠĂẰẮẲẴẶÂẦẤẨẪẬÈÉẺẼẸÊỀẾỂỄỆÌÍỈĨỊÒÓỎÕỌÔỒỐỔỖỘƠỜỚỞỠỢÙÚỦŨỤƯỪỨỬỮỰỲÝỶỸỴĐ";
+  const VN_ALLOWED_REGEX = new RegExp(`[^${VN_LETTERS}0-9\\s.,!?:;'"()\\-…]`, 'g');
+  const VN_LETTER_TEST = new RegExp(`[${VN_LETTERS}]`);
+
+  function cleanVietnameseText(text){
+    if (!text) return '';
+    let out = text.replace(VN_ALLOWED_REGEX, '');
+    out = out.replace(/\s+/g, ' ').trim();
+    if (!VN_LETTER_TEST.test(out)) return '';
+    return out;
+  }
+
   async function runOcr(worker, region){
     const vw = video.videoWidth, vh = video.videoHeight;
     const sx = region.x * vw, sy = region.y * vh;
@@ -712,7 +724,7 @@
       throw new Error('CORS_DRAW');
     }
     const { data } = await worker.recognize(dataUrl);
-    return (data.text || '').replace(/\s+/g,' ').trim();
+    return cleanVietnameseText(data.text || '');
   }
 
   startBtn.addEventListener('click', async () => {
